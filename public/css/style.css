@@ -24,6 +24,51 @@ body {
   line-height: 40px;
 }
 
+.board {
+  display: block;
+  background-color: #8c8c8c;
+  border: 10px solid #444444;
+  border-radius: 5px;
+  height: 80vh;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+
+.addButton {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 28px;
+  background: orangered;
+  padding: 12px 20px 12px 20px;
+  border: 0px;
+  box-shadow: 3px 3px 5px #444444;
+  text-decoration: none;
+  float: right;
+  position: absolute;
+  bottom: 10px;
+  right: 26px;
+
+}
+
+.addButton:hover {
+  background: orange;
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* Custom page footer */
 .footer {
   padding-top: 19px;
@@ -84,4 +129,13 @@ body {
 
 footer{
   margin-top:40px;
+}
+
+
+.text-muted{
+  display: inline;
+}
+
+.onlineUsers {
+  float: right;
 }
