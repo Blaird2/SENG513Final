@@ -1,7 +1,6 @@
 /* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+
 }
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
@@ -14,7 +13,6 @@ body {
 
 /* Custom page header */
 .header {
-  padding-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;
 }
 /* Make the masthead heading the same height as the navigation */
@@ -24,16 +22,20 @@ body {
   line-height: 40px;
 }
 
-.board {
+#board {
   display: block;
   background-color: #8c8c8c;
   border: 10px solid #444444;
   border-radius: 5px;
   height: 80vh;
-  padding-left: 30px;
-  padding-right: 30px;
+  margin: 15px;
+  overflow: hidden;
+  position: relative;
 }
 
+.row {
+	margin: 0px;
+}
 
 .addButton {
   -webkit-border-radius: 50%;
@@ -42,14 +44,14 @@ body {
   color: #ffffff;
   font-size: 28px;
   background: orangered;
-  padding: 12px 20px 12px 20px;
+  padding: 10px 20px 10px 20px;
   border: 0px;
   box-shadow: 3px 3px 5px #444444;
   text-decoration: none;
   float: right;
   position: absolute;
-  bottom: 10px;
-  right: 26px;
+  bottom: 15px;
+  right: 15px;
 
 }
 
@@ -71,9 +73,12 @@ body {
 
 /* Custom page footer */
 .footer {
-  padding-top: 19px;
+  padding-top: 10px;
   color: #777;
   border-top: 1px solid #e5e5e5;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
 }
 
 /* Customize container */
@@ -115,7 +120,7 @@ body {
   }
   /* Space out the masthead */
   .header {
-    margin-bottom: 30px;
+
   }
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
@@ -128,7 +133,7 @@ body {
 }
 
 footer{
-  margin-top:40px;
+  
 }
 
 

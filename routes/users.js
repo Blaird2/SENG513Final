@@ -24,6 +24,7 @@ router.post('/register', function(req, res){
 	var password2 = req.body.password2;
 	var picture = req.body.picture;
 
+
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('email', 'Email is required').notEmpty();
@@ -91,7 +92,7 @@ passport.deserializeUser(function(id, done) {
 router.post('/login',
   passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
-    res.redirect('/', {username: req.body.username});
+    res.redirect('/');
   });
 
 router.get('/logout', function(req, res){
