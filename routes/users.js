@@ -110,4 +110,10 @@ router.get('/logout', function(req, res){
 	res.redirect('/users/login');
 });
 
+router.post('/addNote', function(req, res){
+
+});
+
+
+
 module.exports = router;
