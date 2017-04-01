@@ -20,6 +20,7 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 40px;
+  vertical-align: center;
 }
 
 #board {
@@ -143,4 +144,20 @@ footer{
 
 .onlineUsers {
   float: right;
+}
+
+.you {
+  text-align: center;
+  list-style-type: none;
+  vertical-align: middle;
+}
+
+.profilePic {
+  width: 80px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.yourName {
+  font-weight: bold;
 }
