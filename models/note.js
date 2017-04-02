@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 
 var NoteSchema = mongoose.Schema({
     username: String,
+    title: String,
     note: String
 });
 

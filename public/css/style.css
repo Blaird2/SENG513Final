@@ -172,14 +172,14 @@ footer{
   margin: auto;
   height: 150px;
   width: 150px;
-}
-
-input#noteForm {
-  width: 150px;
-  height: 150px;
   background-color: orange;
   visibility: hidden;
 }
 
-
+input#noteForm1{
+  background-color: orange;
+}
+input#noteForm2{
+  background-color: orange;
+}
 

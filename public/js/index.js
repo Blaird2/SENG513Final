@@ -6,6 +6,9 @@
  */
 function addNote(){
     // Make note template visible
-    document.getElementById('noteForm').style.visibility = 'visible';
+    document.getElementById('note').style.visibility = 'visible'
+   // document.getElementById('noteForm1').style.visibility = 'visible';
+    //document.getElementById('noteForm2').style.visibility = 'visible';
+
 
 }

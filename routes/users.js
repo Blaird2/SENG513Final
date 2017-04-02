@@ -111,12 +111,16 @@ router.get('/logout', function(req, res){
 });
 
 router.post('/addNote', function(req, res){
-	var note = req.body.noteInput;
-    req.checkBody('noteInput', 'Text is required to make a note').notEmpty();
+	var title = req.body.noteInput1;
+	var note = req.body.noteInput2;
+    req.checkBody('noteInput1', 'Title is required to make a note').notEmpty();
+    req.checkBody('noteInput2', 'Text is required to make a note').notEmpty();
+
 
     var newNote = Note({
 		username: req.user.username,
-		note: req.body.noteInput
+		note: req.body.noteInput2,
+		title:req.body.noteInput1
 	});
 
     Note.createNote(newNote);
