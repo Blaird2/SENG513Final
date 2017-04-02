@@ -5,6 +5,7 @@
  * brings up the new note creation.
  */
 function addNote(){
-
+    // Make note template visible
+    document.getElementById('noteForm').style.visibility = 'visible';
 
 }

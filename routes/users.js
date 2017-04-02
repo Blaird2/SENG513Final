@@ -121,7 +121,10 @@ router.post('/addNote', function(req, res){
 
     Note.createNote(newNote);
 
-    req.flash('success_msg', 'New note created');
+    // req.flash('success_msg', 'New note created'); Messes with layout :/
+
+    res.redirect('/');
+
     console.log(req.user.username);
 	console.log(req.body.noteInput);
 });

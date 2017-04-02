@@ -178,6 +178,7 @@ input#noteForm {
   width: 150px;
   height: 150px;
   background-color: orange;
+  visibility: hidden;
 }
 
 
