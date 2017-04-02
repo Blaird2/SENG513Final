@@ -4,7 +4,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/user');
-
+var Note = require('../models/note');
 
 
 
@@ -111,7 +111,19 @@ router.get('/logout', function(req, res){
 });
 
 router.post('/addNote', function(req, res){
+	var note = req.body.noteInput;
+    req.checkBody('noteInput', 'Text is required to make a note').notEmpty();
 
+    var newNote = Note({
+		username: req.user.username,
+		note: req.body.noteInput
+	});
+
+    Note.createNote(newNote);
+
+    req.flash('success_msg', 'New note created');
+    console.log(req.user.username);
+	console.log(req.body.noteInput);
 });
 
 
