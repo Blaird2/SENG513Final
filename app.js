@@ -17,7 +17,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 // Init App
-var app = express();
+ app = express();
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
@@ -80,12 +80,50 @@ app.use(function (req, res, next) {
 
 
 
-app.use('/', routes);
-app.use('/users', users);
+
 
 // Set Port
 app.set('port', (process.env.PORT || 3000));
 
-app.listen(app.get('port'), function(){
-  console.log('Server started on port '+app.get('port'));
+//app.listen(app.get('port'), function(){
+//  console.log('Server started on port '+app.get('port'));
+//});
+
+
+
+
+
+
+var io = require('socket.io').listen(app.listen(3000));
+
+//io.sockets.on('connection', function(socket){
+ // console.log('hello');
+//});
+
+// Make io accessible to our router
+app.use(function(req,res,next){
+
+    req.io = io;
+    console.log('==============================================================')
+    
+    next();
 });
+
+io.sockets.on('connection', function (socket) {
+    console.log('client connect');
+    //socket.on('echo', function (data) {
+     //   io.sockets.emit('message', data);
+   // });
+});
+
+
+
+
+app.use('/', routes);
+app.use('/users', users);
+
+
+module.exports = app;
+
+
+

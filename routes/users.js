@@ -6,11 +6,6 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 var Note = require('../models/note');
 
-
-
-
-
-
 // Register
 router.get('/register', function(req, res){
 	res.render('register');
@@ -49,7 +44,7 @@ router.post('/register', function(req, res){
 	} else {
 		var newUser = new User({
 			name: name,
-			email:email,
+			email: email,
 			username: username,
 			password: password,
 			picture: picture
@@ -99,6 +94,7 @@ passport.deserializeUser(function(id, done) {
 router.post('/login',
   passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
+  	
     res.redirect('/');
   });
 
