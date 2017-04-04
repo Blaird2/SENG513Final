@@ -94,7 +94,11 @@ app.set('port', (process.env.PORT || 3000));
 
 
 
-var io = require('socket.io').listen(app.listen(3000));
+//var io = require('socket.io').listen(app.listen(3000));
+
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+server.listen(3000);
 
 //io.sockets.on('connection', function(socket){
  // console.log('hello');
@@ -104,12 +108,12 @@ var io = require('socket.io').listen(app.listen(3000));
 app.use(function(req,res,next){
 
     req.io = io;
-    console.log('==============================================================')
+    console.log('==============================================================');
     
     next();
 });
 
-io.sockets.on('connection', function (socket) {
+io.on('connection', function (socket) {
     console.log('client connect');
     //socket.on('echo', function (data) {
      //   io.sockets.emit('message', data);

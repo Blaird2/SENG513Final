@@ -9,7 +9,7 @@ router.get('/', ensureAuthenticated, function(req, res){
 
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
-		console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' );
+		//console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' );
 		req.io.sockets.emit('loggedin', req.user); 
 		return next();
 	} else {

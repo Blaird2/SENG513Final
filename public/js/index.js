@@ -4,6 +4,7 @@
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
  */
+var socekt = io();
 function addNote(){
     // Make note template visible
     document.getElementById('note').style.visibility = 'visible'

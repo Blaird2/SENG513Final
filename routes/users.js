@@ -125,8 +125,6 @@ router.post('/addNote', function(req, res){
 
     res.redirect('/');
 
-    console.log(req.user.username);
-	console.log(req.body.noteInput);
 });
 
 
