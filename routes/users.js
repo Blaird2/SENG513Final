@@ -52,7 +52,6 @@ router.post('/register', function(req, res){
 
 		User.createUser(newUser, function(err, user){
 			if(err) throw err;
-			console.log(user);
 		});
 
 		req.flash('success_msg', 'You are registered and can now login');
@@ -126,7 +125,16 @@ router.post('/addNote', function(req, res){
     res.redirect('/');
 
 });
+var io = null;
 
-
-
+var setIo = function (data){
+	io = data;
+}
+if(io !== null){
+    io.on('connection', function (socket) {
+        console.log('client connect');
+        socket.emit('test message', "Test");
+    });
+}
+module.exports.setIo = setIo();
 module.exports = router;

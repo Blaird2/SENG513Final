@@ -25,10 +25,6 @@ app.engine('handlebars', exphbs({defaultLayout:'layout'}));
 app.set('view engine', 'handlebars');
 
 
-
-
-
-
 // BodyParser Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -78,54 +74,24 @@ app.use(function (req, res, next) {
   next();
 });
 
-
-
-
-
 // Set Port
 app.set('port', (process.env.PORT || 3000));
 
-//app.listen(app.get('port'), function(){
-//  console.log('Server started on port '+app.get('port'));
-//});
-
-
-
-
-
-
-//var io = require('socket.io').listen(app.listen(3000));
-
+//Set up sockets
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 server.listen(3000);
-
-//io.sockets.on('connection', function(socket){
- // console.log('hello');
-//});
 
 // Make io accessible to our router
 app.use(function(req,res,next){
 
     req.io = io;
-    console.log('==============================================================');
-    
     next();
 });
 
-io.on('connection', function (socket) {
-    console.log('client connect');
-    //socket.on('echo', function (data) {
-     //   io.sockets.emit('message', data);
-   // });
-});
-
-
-
-
+users.setIo(io);
 app.use('/', routes);
 app.use('/users', users);
-
 
 module.exports = app;
 
