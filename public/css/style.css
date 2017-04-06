@@ -142,7 +142,7 @@ footer{
   display: inline;
 }
 
-.onlineUsers {
+.displayUsers ul {
   float: right;
 }
 
@@ -150,6 +150,21 @@ footer{
   text-align: center;
   list-style-type: none;
   vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  padding-left: 10px; 
+  border-left: 2px solid #eee;
+  margin-left: 10px;
+
+}
+
+.otherUsers {
+  text-align: center;
+  list-style-type: none;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0;
+  padding-left: 10px;
 }
 
 .profilePic {
