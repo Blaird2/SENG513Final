@@ -96,7 +96,7 @@ router.post('/login',
   passport.authenticate('local', {failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
 	  console.log(req.body);
-	  user = req.body.username;
+      user = req.body.username;
 	  res.redirect('/');
   });
 
@@ -120,7 +120,6 @@ router.post('/addNote', function(req, res){
 		note: req.body.noteInput2,
 		title:req.body.noteInput1
 	});
-
     Note.createNote(newNote);
 
     // req.flash('success_msg', 'New note created'); Messes with layout :/
@@ -134,6 +133,7 @@ var setIo = function (data){
 	io = data;
     io.on('connection', function (socket) {
     	console.log('client connect');
+    	console.log(user);
         users.push(user);
         updateUsernames();
         socket.on('disconnect', function(data){
@@ -146,14 +146,15 @@ var setIo = function (data){
         	console.log(data);
 		});
         socket.emit('username',user);
-        console.log(user);
+        //console.log(user);
         socket.on('note',function(data){
-
+			console.log(data.username);
             var newNote = Note({
                 username: data.username,
                 note: data.note,
                 title: data.title
             });
+            console.log(newNote);
 
             Note.createNote(newNote);
 		});
