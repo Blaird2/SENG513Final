@@ -3,6 +3,10 @@ var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/loginapp');   //***********
+var db = mongoose.connection;
+
 var User = require('../models/user');
 var Note = require('../models/note');
 var user = null;
