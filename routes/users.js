@@ -129,12 +129,16 @@ var io = null;
 
 var setIo = function (data){
 	io = data;
-}
-if(io !== null){
     io.on('connection', function (socket) {
         console.log('client connect');
         socket.emit('test message', "Test");
     });
-}
-module.exports.setIo = setIo();
-module.exports = router;
+};
+
+
+
+
+
+
+module.exports.setIo = setIo;
+module.exports.router = router;

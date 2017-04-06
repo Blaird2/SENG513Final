@@ -83,15 +83,16 @@ var io = require('socket.io')(server);
 server.listen(3000);
 
 // Make io accessible to our router
-app.use(function(req,res,next){
+/*app.use(function(req,res,next){
 
     req.io = io;
     next();
 });
-
+*/
+console.log(users);
 users.setIo(io);
 app.use('/', routes);
-app.use('/users', users);
+app.use('/users', users.router);
 
 module.exports = app;
 
