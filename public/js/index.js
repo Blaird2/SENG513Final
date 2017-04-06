@@ -30,4 +30,12 @@ $(function () {
        return false;
     });
 
+    socket.on('get users',function(data){
+       var html = "";
+       for(var i = 0; i < data.length; i++){
+           html+=data[i];
+           $('#users').html(html);
+       }
+    });
+
 });

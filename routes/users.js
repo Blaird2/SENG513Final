@@ -6,6 +6,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 var Note = require('../models/note');
 var user = null;
+var url = null;
+var users = [];
 // Register
 router.get('/register', function(req, res){
 	res.render('register');
@@ -25,7 +27,7 @@ router.post('/register', function(req, res){
 	var password2 = req.body.password2;
 	var picture = req.body.picture;
 	user = username;
-
+	url = picture;
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
 	req.checkBody('email', 'Email is required').notEmpty();
@@ -131,7 +133,15 @@ var io = null;
 var setIo = function (data){
 	io = data;
     io.on('connection', function (socket) {
-        console.log('client connect');
+    	console.log('client connect');
+        users.push(user);
+        updateUsernames();
+        socket.on('disconnect', function(data){
+			users.splice(users.indexOf(user),1);
+			updateUsernames();
+        });
+
+
         socket.on('test message', function(data){
         	console.log(data);
 		});
@@ -150,6 +160,11 @@ var setIo = function (data){
 
     });
 };
+
+function updateUsernames(){
+	io.emit('get users', users);
+	return;
+}
 
 
 
