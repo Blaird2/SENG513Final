@@ -131,7 +131,20 @@ var setIo = function (data){
 	io = data;
     io.on('connection', function (socket) {
         console.log('client connect');
-        socket.emit('test message', "Test");
+        socket.on('test message', function(data){
+        	console.log(data);
+		});
+        socket.on('note',function(data){
+
+            var newNote = Note({
+                username: "", //req.user.username,
+                note: data.note,
+                title: data.title
+            });
+
+            Note.createNote(newNote);
+		});
+
     });
 };
 
