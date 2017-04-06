@@ -33,7 +33,7 @@ $(function () {
     socket.on('get users',function(data){
        var html = "";
        for(var i = 0; i < data.length; i++){
-           html+=data[i];
+           html+=data[i].user+ "<img src =  + data[i].picture/>";
            $('#users').html(html);
        }
     });

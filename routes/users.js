@@ -97,6 +97,7 @@ router.post('/login',
   function(req, res) {
 	  console.log(req.body);
       user = req.body.username;
+      url = req.user.picture;
 	  res.redirect('/');
   });
 
@@ -133,11 +134,12 @@ var setIo = function (data){
 	io = data;
     io.on('connection', function (socket) {
     	console.log('client connect');
-    	console.log(user);
-        users.push(user);
+    	var userObject = {user:user,picture:url};
+    	//console.log(userObject);
+        users.push(userObject);
         updateUsernames();
         socket.on('disconnect', function(data){
-			users.splice(users.indexOf(user),1);
+			users.splice(users.indexOf(userObject));
 			updateUsernames();
         });
 
