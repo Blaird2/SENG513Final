@@ -89,7 +89,7 @@ server.listen(3000);
     next();
 });
 */
-console.log(users);
+//console.log(users);
 users.setIo(io);
 app.use('/', routes);
 app.use('/users', users.router);

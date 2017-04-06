@@ -5,7 +5,7 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/user');
 var Note = require('../models/note');
-
+var user = null;
 // Register
 router.get('/register', function(req, res){
 	res.render('register');
@@ -91,10 +91,10 @@ passport.deserializeUser(function(id, done) {
 });
 
 router.post('/login',
-  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
+  passport.authenticate('local', {failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
-  	
-    res.redirect('/');
+	  console.log("-----------" );
+     res.redirect('/');
   });
 
 router.get('/logout', function(req, res){
@@ -134,10 +134,12 @@ var setIo = function (data){
         socket.on('test message', function(data){
         	console.log(data);
 		});
+        //socket.emit('username',username);
+        //console.log(username);
         socket.on('note',function(data){
 
             var newNote = Note({
-                username: "", //req.user.username,
+                username: data.username,
                 note: data.note,
                 title: data.title
             });
