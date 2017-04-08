@@ -31,8 +31,18 @@ $(function () {
        return false;
     });
 
+
     socket.on('notes', function(data){
         console.log(data)
     })
+
+    socket.on('get users',function(data){
+       var html = "";
+       for(var i = 0; i < data.length; i++){
+           html+=data[i].user+ "<img src =  + data[i].picture/>";
+           $('#users').html(html);
+       }
+    });
+
 
 });

@@ -11,6 +11,9 @@ var User = require('../models/user');
 var Note = require('../models/note');
 var user = null;
 
+var url = null;
+var users = [];
+
 // Register
 router.get('/register', function(req, res){
 	res.render('register');
@@ -29,6 +32,9 @@ router.post('/register', function(req, res){
 	var password = req.body.password;
 	var password2 = req.body.password2;
 	var picture = req.body.picture;
+
+	user = username;
+	url = picture;
 
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
@@ -97,8 +103,12 @@ passport.deserializeUser(function(id, done) {
 router.post('/login',
   passport.authenticate('local', {failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
-	  console.log("-----------" );
-     res.redirect('/');
+
+	  console.log(req.body);
+      user = req.body.username;
+      url = req.user.picture;
+	  res.redirect('/');
+
   });
 
 router.get('/logout', function(req, res){
@@ -121,7 +131,6 @@ router.post('/addNote', function(req, res){
 		note: req.body.noteInput2,
 		title:req.body.noteInput1
 	});
-
     Note.createNote(newNote);
 
     // req.flash('success_msg', 'New note created'); Messes with layout :/
@@ -134,19 +143,32 @@ var io = null;
 var setIo = function (data){
 	io = data;
     io.on('connection', function (socket) {
-        console.log('client connect');
+    	console.log('client connect');
+    	var userObject = {user:user,picture:url};
+    	//console.log(userObject);
+        users.push(userObject);
+        updateUsernames();
+        socket.on('disconnect', function(data){
+			users.splice(users.indexOf(userObject));
+			updateUsernames();
+        });
+
+
         socket.on('test message', function(data){
         	console.log(data);
 		});
-        //socket.emit('username',username);
-        //console.log(username);
-        socket.on('note',function(data){
 
+        socket.emit('username',user);
+        //console.log(user);
+
+        socket.on('note',function(data){
+			console.log(data.username);
             var newNote = Note({
                 username: data.username,
                 note: data.note,
                 title: data.title
             });
+            console.log(newNote);
 
             Note.createNote(newNote);
 
@@ -161,6 +183,11 @@ var setIo = function (data){
 
     });
 };
+
+function updateUsernames(){
+	io.emit('get users', users);
+	return;
+}
 
 
 
