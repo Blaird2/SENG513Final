@@ -26,8 +26,13 @@ $(function () {
            socket.emit('note',{note:$('#noteForm2').val(), title:$('#noteForm1').val(),username:username});
            document.getElementById('note').style.visibility = 'hidden';
 
+
        }
        return false;
     });
+
+    socket.on('notes', function(data){
+        console.log(data)
+    })
 
 });

@@ -10,6 +10,7 @@ var db = mongoose.connection;
 var User = require('../models/user');
 var Note = require('../models/note');
 var user = null;
+
 // Register
 router.get('/register', function(req, res){
 	res.render('register');
@@ -28,7 +29,6 @@ router.post('/register', function(req, res){
 	var password = req.body.password;
 	var password2 = req.body.password2;
 	var picture = req.body.picture;
-	user = username;
 
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
@@ -97,9 +97,8 @@ passport.deserializeUser(function(id, done) {
 router.post('/login',
   passport.authenticate('local', {failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
-	  console.log(req.body);
-	  user = req.body.username;
-	  res.redirect('/');
+	  console.log("-----------" );
+     res.redirect('/');
   });
 
 router.get('/logout', function(req, res){
@@ -139,8 +138,8 @@ var setIo = function (data){
         socket.on('test message', function(data){
         	console.log(data);
 		});
-        socket.emit('username',user);
-        console.log(user);
+        //socket.emit('username',username);
+        //console.log(username);
         socket.on('note',function(data){
 
             var newNote = Note({
@@ -150,6 +149,14 @@ var setIo = function (data){
             });
 
             Note.createNote(newNote);
+
+            /**Note.find(function (err, kittens) {
+                if (err) return console.error(err);
+                console.log(kittens);
+            }); */
+
+			console.log(Note.find());
+            socket.emit('allNotes', "kasjdfas");
 		});
 
     });
