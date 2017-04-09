@@ -13,7 +13,6 @@ var username = null;
 $(function () {
     var socket = io();
 
-    console.log("Hello!");
     socket.emit('test message',function (data) {
         console.log(data);
     });
@@ -22,7 +21,6 @@ $(function () {
     });
     $('form').submit(function () {
        if(($('#noteForm1').val().trim()) && ($('#noteForm2').val().trim())){
-           console.log("yas");
            socket.emit('note',{note:$('#noteForm2').val(), title:$('#noteForm1').val(),username:username});
            document.getElementById('note').style.visibility = 'hidden';
 

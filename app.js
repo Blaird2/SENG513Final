@@ -80,7 +80,9 @@ app.set('port', (process.env.PORT || 3000));
 //Set up sockets
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-server.listen(3000);
+server.listen(3000, function() {
+	console.log("Listening on port 3000");
+});
 
 // Make io accessible to our router
 /*app.use(function(req,res,next){
