@@ -202,6 +202,7 @@ var setIo = function (data){
 };
 
 function updateUsernames(){
+
 	io.emit('get users', users);
 	return;
 }
