@@ -13,6 +13,7 @@ var user = null;
 
 var url = null;
 var users = [];
+var notes = [];
 
 // Register
 router.get('/register', function(req, res){
@@ -148,37 +149,50 @@ var setIo = function (data){
     	//console.log(userObject);
         users.push(userObject);
         updateUsernames();
+
+        /******************         Switch to this later        ******************************/
+        /** Send new user all notes in the database
+        var res = Note.find(function (err, note) {
+            if (err) return console.error(err);
+            console.log(note);
+            notesInDB.push(note);
+
+        }).toArray();
+		console.log(res); */
+
+
+        socket.emit('allNotes', notes);
+
         socket.on('disconnect', function(data){
 			users.splice(users.indexOf(userObject));
 			updateUsernames();
         });
 
 
-        socket.on('test message', function(data){
-        	console.log(data);
-		});
+
 
         socket.emit('username',user);
         //console.log(user);
 
         socket.on('note',function(data){
-			console.log(data.username);
+
             var newNote = Note({
                 username: data.username,
                 note: data.note,
                 title: data.title
             });
-            console.log(newNote);
+            //console.log(newNote);
 
             Note.createNote(newNote);
+			notes.push(newNote);
 
-            /**Note.find(function (err, kittens) {
-                if (err) return console.error(err);
-                console.log(kittens);
-            }); */
+            console.log("-----------------------------------------");
+            console.log(notes);
+            io.emit('oneNote', newNote);
 
-			console.log(Note.find());
-            socket.emit('allNotes', "kasjdfas");
+
+
+            console.log("-----------------------------------------");
 		});
 
     });

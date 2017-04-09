@@ -12,8 +12,7 @@ var NoteSchema = mongoose.Schema({
 var Note = module.exports = mongoose.model('Note', NoteSchema);
 
 module.exports.createNote = function(newNote){
-    console.log("Before Save",newNote);
-    newNote.save( function() { console.log("savecb:", arguments)});
-    console.log("After Save",newNote);
+
+    newNote.save();
 
 };
