@@ -12,11 +12,29 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             {{#if user}}
-                <li> <ul class = "you">
+                <li id = "displayUsers">
+                  <ul id = "you">
                     <li><img class = "profilePic" src={{user.picture}}  /> </li>
                     <li class = "yourName">{{user.username}}</li>
-                    </ul>
+                  </ul>
+<!--                             
+                  <ul class = "otherUsers">
+                    <li><img class = "profilePic" src={{user.picture}}  /> </li>
+                    <li class = "yourName">{{user.username}}</li>
+                  </ul>
+
+                  <ul class = "otherUsers">
+                    <li><img class = "profilePic" src={{user.picture}}  /> </li>
+                    <li class = "yourName">{{user.username}}</li>
+                  </ul>
+
+                  <ul class = "otherUsers">
+                    <li><img class = "profilePic" src={{user.picture}}  /> </li>
+                    <li class = "yourName">{{user.username}}</li>
+                  </ul>
+-->
                 </li>
+
                 <li role="presentation"><a href="/">Dashboard</a></li>
                 <li role="presentation"><a href="/users/logout">Logout</a></li>
                 <li id = "users"></li>
@@ -24,9 +42,21 @@
               <li role="presentation"><a href="/users/login">Login</a></li>
               <li role="presentation"><a href="/users/register">Register</a></li>
             {{/if}}
+
           </ul>
+         
+          <img src="/images/logo.png" class="logo">
         </nav>
-        <img src="images/logo.png" class="logo">
+
+        <!--  <h3 class="text-muted">Post-It</h3>
+        -->
+        
+        <!--{{#if user}}
+            <h3 class="text-muted" class="onlineUsers">Online Users:</h3>
+        {{else}}
+            <h3 class="text-muted" >LoginApp</h3>
+        {{/if}}-->
+
       </div>
 
 
