@@ -84,7 +84,7 @@ $(function () {
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
-                    '<img class = "deleteNote" src = "" onclick="deleteNote()"/>' +
+                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote()">' +
                 '</div>';
             $(string).insertAfter('#insert');
         }
@@ -94,7 +94,7 @@ $(function () {
     socket.on('get users',function(data){
        var html = "";
        for(var i = 0; i < data.length; i++){
-           html+=data[i].user+ "<img src = "+ data[i].picture + "/>";
+           html+=data[i].user+ "<img src = " + data[i].picture + " />";
            $('#users').html(html);
        }
     });
