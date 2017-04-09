@@ -96,13 +96,15 @@ $(function () {
 
 
     socket.on('get users',function(data){
-       var string = "";
+       
 
        for(var i = 0; i < data.length; i++){
-           string += "<ul class = 'otherUsers'><li><img class = 'profilePic' src=" + data[i].picture + "  /></li><li class = 'yourName'>" + data[i].user + "</li></ul>";
-       }
-
+          var string = "";
+           if (!(data[i].user === null)){
+             string += "<ul class = 'otherUsers'><li><img class = 'profilePic' src=" + data[i].picture + "  /></li><li class = 'yourName'>" + data[i].user + "</li></ul>";
+           }
         $(string).insertAfter('#you');
+       }
 
     });
 
