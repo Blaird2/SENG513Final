@@ -142,11 +142,11 @@ footer{
   display: inline;
 }
 
-.displayUsers ul {
+#displayUsers ul {
   float: right;
 }
 
-.you {
+#you {
   text-align: center;
   list-style-type: none;
   vertical-align: middle;

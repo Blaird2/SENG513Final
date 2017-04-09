@@ -12,12 +12,12 @@
         <nav>
           <ul class="nav nav-pills pull-right">
             {{#if user}}
-                <li class = "displayUsers">
-                  <ul class = "you">
+                <li id = "displayUsers">
+                  <ul id = "you">
                     <li><img class = "profilePic" src={{user.picture}}  /> </li>
                     <li class = "yourName">{{user.username}}</li>
                   </ul>
-                             
+<!--                             
                   <ul class = "otherUsers">
                     <li><img class = "profilePic" src={{user.picture}}  /> </li>
                     <li class = "yourName">{{user.username}}</li>
@@ -32,6 +32,7 @@
                     <li><img class = "profilePic" src={{user.picture}}  /> </li>
                     <li class = "yourName">{{user.username}}</li>
                   </ul>
+-->
                 </li>
 
                 <li role="presentation"><a href="/">Dashboard</a></li>

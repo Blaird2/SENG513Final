@@ -38,9 +38,9 @@ $(function () {
 
        if(($('#noteForm1').val().trim()) && ($('#noteForm2').val().trim())){
            socket.emit('note',{note:$('#noteForm2').val(), title:$('#noteForm1').val(),username:username});
+       }
 
        if((note1.val().trim()) && (note2.val().trim())){
-           console.log("yas");
            socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
            note1.val(' ');
            note2.val(' ');
@@ -96,11 +96,14 @@ $(function () {
 
 
     socket.on('get users',function(data){
-       var html = "";
+       var string = "";
+
        for(var i = 0; i < data.length; i++){
-           html+=data[i].user+ "<img src = "+ data[i].picture + "/>";
-           $('#users').html(html);
+           string += "<ul class = 'otherUsers'><li><img class = 'profilePic' src=" + data[i].picture + "  /></li><li class = 'yourName'>" + data[i].user + "</li></ul>";
        }
+
+        $(string).insertAfter('#you');
+
     });
 
 
