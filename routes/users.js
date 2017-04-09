@@ -3,9 +3,18 @@ var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/loginapp');   //***********
+var db = mongoose.connection;
+
 var User = require('../models/user');
 var Note = require('../models/note');
 var user = null;
+
+var url = null;
+var users = [];
+var notes = [];
+
 // Register
 router.get('/register', function(req, res){
 	res.render('register');
@@ -24,7 +33,9 @@ router.post('/register', function(req, res){
 	var password = req.body.password;
 	var password2 = req.body.password2;
 	var picture = req.body.picture;
+
 	user = username;
+	url = picture;
 
 	// Validation
 	req.checkBody('name', 'Name is required').notEmpty();
@@ -93,9 +104,12 @@ passport.deserializeUser(function(id, done) {
 router.post('/login',
   passport.authenticate('local', {failureRedirect:'/users/login',failureFlash: true}),
   function(req, res) {
+
 	  console.log(req.body);
-	  user = req.body.username;
+      user = req.body.username;
+      url = req.user.picture;
 	  res.redirect('/');
+
   });
 
 router.get('/logout', function(req, res){
@@ -118,7 +132,6 @@ router.post('/addNote', function(req, res){
 		note: req.body.noteInput2,
 		title:req.body.noteInput1
 	});
-
     Note.createNote(newNote);
 
     // req.flash('success_msg', 'New note created'); Messes with layout :/
@@ -131,12 +144,39 @@ var io = null;
 var setIo = function (data){
 	io = data;
     io.on('connection', function (socket) {
-        console.log('client connect');
-        socket.on('test message', function(data){
-        	console.log(data);
-		});
+    	console.log('client connect');
+    	var userObject = {user:user,picture:url};
+    	//console.log(userObject);
+        users.push(userObject);
+        updateUsernames();
+
+
+        /******************         Switch to this later        ******************************
+        notesIndb = [];
+
+        // Send new user all notes in the database
+        Note.find(function (err, note) {
+            if (err) return console.error(err);
+            console.log(note);
+            notesIndb.push(note);
+        });
+
+		console.log(notesIndb); */
+
+
+        socket.emit('allNotes', notes);
+
+        socket.on('disconnect', function(data){
+			users.splice(users.indexOf(userObject));
+			updateUsernames();
+        });
+
+
+
+
         socket.emit('username',user);
-        console.log(user);
+        //console.log(user);
+
         socket.on('note',function(data){
 
             var newNote = Note({
@@ -144,12 +184,27 @@ var setIo = function (data){
                 note: data.note,
                 title: data.title
             });
+            //console.log(newNote);
 
             Note.createNote(newNote);
+			notes.push(newNote);
+
+            console.log("-----------------------------------------");
+            console.log(notes);
+            io.emit('oneNote', newNote);
+
+
+
+            console.log("-----------------------------------------");
 		});
 
     });
 };
+
+function updateUsernames(){
+	io.emit('get users', users);
+	return;
+}
 
 
 

@@ -188,7 +188,7 @@ footer{
   margin: auto;
   height: 150px;
   width: 150px;
-  background-color: orange;
+  background-color: darkorange;
   visibility: hidden;
 }
 
@@ -197,9 +197,28 @@ footer{
 }
 
 input#noteForm1{
-  background-color: orange;
-}
-input#noteForm2{
-  background-color: orange;
+  background-color: darkorange;
 }
 
+input#noteForm2{
+  background-color: darkorange;
+}
+
+
+#post-it {
+  display: block;
+
+}
+
+.sticky-note {
+  display: inline-block;
+  width: 150px;
+  height: 160px;
+  background: orange;
+  margin: 5px;
+
+}
+
+.note-content-list {
+  list-style-type: none;
+}

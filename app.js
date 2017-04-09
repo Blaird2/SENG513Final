@@ -9,9 +9,8 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/loginapp');   //***********
-var db = mongoose.connection;
+
+
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -80,8 +79,9 @@ app.set('port', (process.env.PORT || 3000));
 //Set up sockets
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-server.listen(3000, function() {
-	console.log("Listening on port 3000");
+
+server.listen(3000, function(){
+    console.log("Listening on port: 3000");
 });
 
 // Make io accessible to our router
@@ -91,6 +91,7 @@ server.listen(3000, function() {
     next();
 });
 */
+
 //console.log(users);
 users.setIo(io);
 app.use('/', routes);
