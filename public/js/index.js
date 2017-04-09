@@ -10,31 +10,38 @@ function addNote(){
 
 }
 
-function create(htmlStr) {
-    var frag = document.createDocumentFragment(), temp = document.createElement('div');
-    temp.innerHTML = htmlStr;
-
-    while (temp.firstChild) {
-        frag.appendChild(temp.firstChild);
-    }
-    return frag;
-}
 
 function deleteNote(data) {
-
+    console.log(data);
 }
 
+
+
 var username = null;
+
 $(function () {
+
+
+    $( "#note" ).draggable();
+
+
+
+
     var socket = io();
+    var note1 = $('#noteForm1');
+    var note2 = $('#noteForm2');
+
+
+
 
 
     socket.on('username',function(data){
         username = data;
     });
 
-    var note1 = $('#noteForm1');
-    var note2 = $('#noteForm2');
+
+
+
     $('form').submit(function () {
        if((note1.val().trim()) && (note2.val().trim())){
            console.log("yas");
@@ -55,18 +62,42 @@ $(function () {
 
 
 
+   /** socket.on('notes-one-by-one', function(data) {
+        var board = $('board');
+
+        var string =  '<div class = "sticky-note">' +
+            '<ul class = "note-content-list">' +
+            '<li id = "title">' + data.title + '</li>' +
+            '<li id = "note-content">' + data.note + '</li>' +
+            '</ul>' +
+            '</div>';
+        $(string).insertAfter('#insert');
+
+    }); */
+
+    socket.on('test', function(data){
+        console.log(data);
+    });
+
+
+
+
+
+
 
     socket.on('oneNote', function(data){
         var board = $('board');
 
-
-        var string =  '<div class = "sticky-note">' +
+        var string =  '<div class = "sticky-note" id = "sticky-noteid">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                             '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
+            '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data.id   +  "\'" + ')" >' +
                     '</div>';
         $(string).insertAfter('#insert');
+
+        $( "#sticky-noteid" ).draggable();
 
         // Print out the new note
         //var fragment = create('<div>Hello!</div>');
@@ -75,36 +106,46 @@ $(function () {
     });
 
 
+
+
+
+
+
     socket.on('allNotes', function(data) {
         var board = $('board');
 
         for (var i = 0; i < data.length; i++) {
-            var string = '<div class = "sticky-note">' +
+            var string = '<div class = "sticky-note" id = "sticky-noteid">' +
                 '<ul class = "note-content-list">' +
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
-                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote()">' +
+                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i].id   +  "\'" + ')" >' +
                 '</div>';
             $(string).insertAfter('#insert');
+            $( "#sticky-noteid" ).draggable();
         }
     });
 
 
+
+
+
+
+
+
     socket.on('get users',function(data){
-
-       
-
+       var string = "";
        for(var i = 0; i < data.length; i++){
-          var string = "";
-           if (!(data[i].user === null)){
+          
+           if (!(data[i].user === null) && (data[i].user !== username)){
              string += "<ul class = 'otherUsers'><li><img class = 'profilePic' src=" + data[i].picture + "  /></li><li class = 'yourName'>" + data[i].user + "</li></ul>";
            }
-        $(string).insertAfter('#you');
+        $('#notYou').html(string);
        }
 
-
     });
+
 
 
 });

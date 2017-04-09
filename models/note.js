@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 var NoteSchema = mongoose.Schema({
     username: String,
     title: String,
-    note: String
+    note: String,
+    id: String
 });
 
 var Note = module.exports = mongoose.model('Note', NoteSchema, 'notes');

@@ -188,7 +188,7 @@ footer{
   margin: auto;
   height: 150px;
   width: 150px;
-  background-color: darkorange;
+  background-color: yellow;
   visibility: hidden;
 }
 
@@ -197,11 +197,11 @@ footer{
 }
 
 input#noteForm1{
-  background-color: darkorange;
+  background-color: yellow;
 }
 
 input#noteForm2{
-  background-color: darkorange;
+  background-color: yellow;
 }
 
 
@@ -216,9 +216,32 @@ input#noteForm2{
   height: 160px;
   background: orange;
   margin: 5px;
+  position: relative;
 
 }
 
 .note-content-list {
   list-style-type: none;
 }
+
+.deleteNote {
+  width: 18px;
+  height: 26px;
+  position: absolute;
+  bottom: 10px;
+  margin-left: 130px;
+  display: none;
+}
+
+
+
+/* Making trash can visible on hover of sticky note*/
+.sticky-note:hover .deleteNote {
+  display:block;
+}
+
+
+
+
+
+
