@@ -9,10 +9,8 @@ var NoteSchema = mongoose.Schema({
     note: String
 });
 
-var Note = module.exports = mongoose.model('Note', NoteSchema);
+var Note = module.exports = mongoose.model('Note', NoteSchema, 'notes');
 
 module.exports.createNote = function(newNote){
-
     newNote.save();
-
 };

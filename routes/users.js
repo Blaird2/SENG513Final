@@ -150,15 +150,18 @@ var setIo = function (data){
         users.push(userObject);
         updateUsernames();
 
-        /******************         Switch to this later        ******************************/
-        /** Send new user all notes in the database
-        var res = Note.find(function (err, note) {
+
+        /******************         Switch to this later        ******************************
+        notesIndb = [];
+
+        // Send new user all notes in the database
+        Note.find(function (err, note) {
             if (err) return console.error(err);
             console.log(note);
-            notesInDB.push(note);
+            notesIndb.push(note);
+        });
 
-        }).toArray();
-		console.log(res); */
+		console.log(notesIndb); */
 
 
         socket.emit('allNotes', notes);

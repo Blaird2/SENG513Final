@@ -20,6 +20,9 @@ function create(htmlStr) {
     return frag;
 }
 
+function deleteNote(data) {
+
+}
 
 var username = null;
 $(function () {
@@ -81,6 +84,7 @@ $(function () {
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
+                    '<img class = "deleteNote" src = "" onclick="deleteNote()"/>' +
                 '</div>';
             $(string).insertAfter('#insert');
         }
