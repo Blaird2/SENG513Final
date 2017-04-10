@@ -14,7 +14,6 @@ var user = null;
 var url = null;
 var users = [];
 var notes = [];
-var notesIndb = [];
 
 // Register
 router.get('/register', function(req, res){
@@ -140,29 +139,24 @@ var setIo = function (data){
         updateUsernames();
 
 
-        /******************         Switch to this later        ******************************
+
 
         console.log("-----------------------------------------");
 
         // Send new user all notes in the database
-        Note.find(function (err, note) {
+        Note.find({},function (err, note) {
             if (err) return console.error(err);
             //console.log(note);
-            //socket.emit('notes-one-by-one', note);
+            socket.emit('allNotes', note);
         });
 
 
-        console.log("-----------------------------------------"); */
-
-
-
-		// trying to use db
-        //socket.emit('test', notesIndb);
+        console.log("-----------------------------------------");
 
 
 
 		// Works with array
-        socket.emit('allNotes', notes);
+        //socket.emit('allNotes', notes);
 
         socket.on('disconnect', function(data){
 			users.splice(users.indexOf(userObject));
@@ -184,15 +178,14 @@ var setIo = function (data){
                 username: data.username,
                 note: data.note,
                 title: data.title,
-				id: getTime()
+				x: "0px",
+				y: "0px"
             });
             //console.log(newNote);
 
             Note.createNote(newNote);
 			notes.push(newNote);
 
-
-            console.log(notes);
             io.emit('oneNote', newNote);
 
 		});

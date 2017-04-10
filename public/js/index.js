@@ -21,18 +21,11 @@ var username = null;
 
 $(function () {
 
-
     $( "#note" ).draggable();
-
-
-
 
     var socket = io();
     var note1 = $('#noteForm1');
     var note2 = $('#noteForm2');
-
-
-
 
 
     socket.on('username',function(data){
@@ -57,38 +50,14 @@ $(function () {
 
 
 
-
-
-
-
-
-   /** socket.on('notes-one-by-one', function(data) {
-        var board = $('board');
-
-        var string =  '<div class = "sticky-note">' +
-            '<ul class = "note-content-list">' +
-            '<li id = "title">' + data.title + '</li>' +
-            '<li id = "note-content">' + data.note + '</li>' +
-            '</ul>' +
-            '</div>';
-        $(string).insertAfter('#insert');
-
-    }); */
-
-    socket.on('test', function(data){
-        console.log(data);
-    });
-
-
-
-
-
-
-
     socket.on('oneNote', function(data){
         var board = $('board');
 
-        var string =  '<div class = "sticky-note" id = "sticky-noteid">' +
+        // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // and need to update note (x,y) in db on mouse up after mouse down
+
+        // We also need to add color here after
+        var string =  '<div class = "sticky-note" id = "sticky-noteid" ' + ' ' + '>' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                             '<li id = "note-content">' + data.note + '</li>' +

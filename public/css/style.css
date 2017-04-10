@@ -190,6 +190,7 @@ footer{
   width: 150px;
   background-color: yellow;
   visibility: hidden;
+  z-index: 1;
 }
 
 .logo {
