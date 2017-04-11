@@ -7,14 +7,17 @@
 function addNote(){
     // Make note template visible
     document.getElementById('note').style.visibility = 'visible';
-
 }
 
-
 function deleteNote(data) {
+    console.log('delete note');
     console.log(data);
 }
 
+function changeNoteColor(color) {
+    console.log(color);
+    $('.sticky-note').css("background", color);
+}
 
 
 var username = null;
@@ -60,16 +63,25 @@ $(function () {
         var string =  '<div class = "sticky-note" id = "sticky-noteid" ' + ' ' + '>' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
-                            '<li id = "note-content">' + data.note + '</li>' +
+                             '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
-            '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data.id   +  "\'" + ')" >' +
-                    '</div>';
+                        '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data.id   +  "\'" + ')" >' +
+                        '<div class = "colorNoteCon">' + 
+                          '<div class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor(' + " \'" + '#0ff' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNotePink" onclick="changeNoteColor(' + " \'" + '#f0f' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor(' + " \'" + '#0f0' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ')"></div>' +
+                        '</div>' +
+                      '</div>';
+
         $(string).insertAfter('#insert');
 
         $( "#sticky-noteid" ).draggable();
+        $( "#sticky-noteid" ).attr('tabindex',-1).focus();
 
         // Print out the new note
-        //var fragment = create('<div>Hello!</div>');
+        //var fragment = ('<div>Hello!</div>');
         //board.insertBefore(fragment, board.childNodes[0]);
 
     });
@@ -90,12 +102,19 @@ $(function () {
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
                     '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i].id   +  "\'" + ')" >' +
+                        '<div class = "colorNoteCon">' + 
+                          '<div class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor(' + " \'" + '#0ff' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNotePink" onclick="changeNoteColor(' + " \'" + '#f0f' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor(' + " \'" + '#0f0' + " \'" + ')"></div>' +
+                          '<div class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ')"></div>' +
+                        '</div>' +
                 '</div>';
             $(string).insertAfter('#insert');
             $( "#sticky-noteid" ).draggable();
+            $( "#sticky-noteid" ).attr('tabindex',-1).focus();
         }
     });
-
 
 
 
@@ -114,7 +133,4 @@ $(function () {
        }
 
     });
-
-
-
 });

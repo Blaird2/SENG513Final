@@ -47,7 +47,7 @@ body {
   background: orangered;
   padding: 10px 20px 10px 20px;
   border: 0px;
-  box-shadow: 3px 3px 5px #444444;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.15);
   text-decoration: none;
   float: right;
   position: absolute;
@@ -188,9 +188,17 @@ footer{
   margin: auto;
   height: 150px;
   width: 150px;
-  background-color: yellow;
+  background-color: orange;
   visibility: hidden;
   z-index: 1;
+}
+
+#title {
+  font-weight: 900;
+}
+
+#note-content {
+
 }
 
 .logo {
@@ -198,17 +206,16 @@ footer{
 }
 
 input#noteForm1{
-  background-color: yellow;
+  background-color: orange;
 }
 
 input#noteForm2{
-  background-color: yellow;
+  background-color: orange;
 }
 
 
 #post-it {
   display: block;
-
 }
 
 .sticky-note {
@@ -218,30 +225,104 @@ input#noteForm2{
   background: orange;
   margin: 5px;
   position: relative;
+  word-wrap: break-word;
+  border: 0.5px solid black;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.15);
 
 }
 
 .note-content-list {
   list-style-type: none;
+  padding-left: 5px;
 }
+
+
+
+#boardOverlay {
+  display: none;
+  background-color: rgba(187, 187, 187, 0.75);
+  height: calc(80vh - 20px);
+  margin: 25px;
+  overflow: hidden;
+  position: relative;
+  top: calc(-80vh - 15px);
+}
+
+
+
+
+
 
 .deleteNote {
   width: 18px;
   height: 26px;
   position: absolute;
-  bottom: 10px;
-  margin-left: 130px;
+  bottom: 5px;
+  right: 5px;
   display: none;
 }
 
-
+.deleteNote:hover {
+  width: 22px;
+  height: 30px;
+  bottom: 3px;
+  right: 3px;
+}
 
 /* Making trash can visible on hover of sticky note*/
-.sticky-note:hover .deleteNote {
-  display:block;
+.sticky-note:focus .deleteNote {
+  display: block;
 }
 
 
+
+
+
+/* Below is all the Styling for the note color buttons lel */
+.colorNoteCon {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  display: none;
+}
+
+.sticky-note:focus .colorNoteCon {
+  display: block;
+}
+
+.colorNote {
+  border-radius: 100px;
+  display: inline-block;
+  padding: 8px 8px;
+  border: 0.5px solid black;
+  margin: 2px;
+  outline: 0;
+}
+
+.colorNote:hover {
+  padding: 10px 10px;
+  margin: 0px;
+}
+
+#colorNoteBlue {
+  background: #0ff;
+}
+
+#colorNoteYellow {
+  background: #ff0;
+}
+
+#colorNotePink {
+  background: #f0f;
+}
+
+#colorNoteGreen {
+  background: #0f0;
+}
+
+#colorNoteOrange {
+  background: #fa0;
+}
 
 
 

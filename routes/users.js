@@ -178,13 +178,14 @@ var setIo = function (data){
                 username: data.username,
                 note: data.note,
                 title: data.title,
-				x: "0px",
-				y: "0px"
+				        x: "0px",
+				        y: "0px",
+                color: "#fa0"
             });
             //console.log(newNote);
 
             Note.createNote(newNote);
-			notes.push(newNote);
+			      notes.push(newNote);
 
             io.emit('oneNote', newNote);
 
