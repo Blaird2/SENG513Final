@@ -143,12 +143,8 @@ var setIo = function (data){
 
         console.log("-----------------------------------------");
 
-        // Send new user all notes in the database
-        Note.find({},function (err, note) {
-            if (err) return console.error(err);
-            //console.log(note);
-            socket.emit('allNotes', note);
-        });
+		// New connection
+		updateNotes(socket, false);
 
 
         console.log("-----------------------------------------");
@@ -164,7 +160,10 @@ var setIo = function (data){
         });
 
 
-
+		socket.on('deleteNote', function(noteID){
+			Note.find({_id: noteID}).remove().exec();
+			updateNotes(socket, true);
+		});
 
 
         //console.log(user);
@@ -185,7 +184,7 @@ var setIo = function (data){
             //console.log(newNote);
 
             Note.createNote(newNote);
-			      notes.push(newNote);
+			notes.push(newNote);
 
             io.emit('oneNote', newNote);
 
@@ -202,7 +201,21 @@ function getTime(){
 	return new Date();
 }
 
+function updateNotes(socket, updateEveryone){
+    // Send new user all notes in the database
+    Note.find({},function (err, note) {
+        if (err) return console.error(err);
+        //console.log(note);
 
+		if(updateEveryone){
+            io.emit('allNotes', note);
+        }
+        else {
+            socket.emit('allNotes', note);
+
+		}
+    });
+}
 
 
 module.exports.setIo = setIo;
