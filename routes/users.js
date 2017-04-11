@@ -127,38 +127,28 @@ var io = null;
 
 var setIo = function (data){
 	io = data;
-    io.on('connection', function (socket) {
-    	console.log('client connect');
-    	var userObject = {user:user,picture:url};
+  io.on('connection', function (socket) {
+   	console.log('client connect');
+   	var userObject = {user:user,picture:url};
 
-    	//Let client know their username
-        users.push(userObject);
-        socket.emit('username',user);
+   	//Let client know their username
+    users.push(userObject);
+    socket.emit('username',user);
 
-        //Displays all online users
-        updateUsernames();
+    //Displays all online users
+    updateUsernames();
 
-
-
-
-        console.log("-----------------------------------------");
-
+    console.log("-----------------------------------------");
 		// New connection
 		updateNotes(socket, false);
 
-
-        console.log("-----------------------------------------");
-
-
+    console.log("-----------------------------------------");
 
 		// Works with array
-        //socket.emit('allNotes', notes);
-
     socket.on('disconnect', function(data){
 			users.splice(users.indexOf(userObject));
 			updateUsernames();
     });
-
 
 		socket.on('deleteNote', function(noteID){
 			Note.find({_id: noteID}).remove().exec();
@@ -166,59 +156,37 @@ var setIo = function (data){
 		});
 
     socket.on('changeNoteColor', function(data) {
-
-      /*Update noes's colour 
-      Note.findById(data.id, function (err, note){
-        note.color = data.color;
-        console.log(note);
+      console.log(data.notecolor);
+      Note.update({ _id: data.noteid }, { $set: {color: data.notecolor} }, function(){
+        updateNotes(socket, true);
       });
-      */
-
-      /*Note.update({ _id: data.noteid }, {
-        color: data.notecolor
-      }, function(err, affected, resp) {
-         console.log(affected);
-      });*/
-
-
-      Note.update(
-      { _id: data.noteid },
-      { $set:
-        {color: data.notecolor}
-      }).exec()
-
-      //console.log(note);
-    
-      // Update all notes 
-      updateNotes(socket, true);
+      
+      //Update all notes 
+      //updateNotes(socket, true);
     });
 
+    socket.on('note',function(data){
 
-        //console.log(user);
+   	  console.log(getTime());
 
-        socket.on('note',function(data){
+      var newNote = Note({
+        username: data.username,
+        note: data.note,
+        title: data.title,
+	      x: "0px",
+	      y: "0px",
+        color: "#fa0"
+      });
+  
+      Note.createNote(newNote);
+	    notes.push(newNote);
 
-        	console.log(getTime());
-
-            var newNote = Note({
-                username: data.username,
-                note: data.note,
-                title: data.title,
-				        x: "0px",
-				        y: "0px",
-                color: "#fa0"
-            });
-            //console.log(newNote);
-
-            Note.createNote(newNote);
-			notes.push(newNote);
-
-            io.emit('oneNote', newNote);
+      io.emit('oneNote', newNote);
 
 		});
-
-    });
+  });
 };
+
 
 function updateUsernames(){
 	io.emit('get users', users);

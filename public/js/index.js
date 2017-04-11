@@ -13,10 +13,8 @@ function addNote(){
 }
 
 function changeNoteColor(color, id) {
-    console.log(color);
-    console.log(id);
-    //$('.sticky-note').css("background", color);
     socket.emit('changeNoteColor', {notecolor:color, noteid:id});
+
 }
 
 function deleteNote(id){
@@ -66,33 +64,27 @@ $(function () {
         // and need to update note (x,y) in db on mouse up after mouse down
 
         // We also need to add color here after
-        var string =  '<div class = "sticky-note" id = "sticky-noteid" ' + ' ' + '>' +
+        var string =  '<div class = "sticky-note" id = "sticky-noteid" style = "background: '  +   data.color   + '">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                              '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
 
                         '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
-                        '<div class = "colorNoteCon">' + 
-                          '<div class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></div>' +                                    
-                          '<div class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></div>' +
-                          '<div class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></div>' +
-                          '<div class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></div>' +
-                          '<div class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></div>' +
+                        '<div id = "colorNoteCon">' + 
+                          '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +                                    
+                          '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
+                          '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
+                          '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
+                          '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
                         '</div>' +
-                      '</div>';
                     '</div>';
 
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
         sticky.draggable();
-        sticky.attr('tabindex',-1).focus();
-
-        // Print out the new note
-        //var fragment = ('<div>Hello!</div>');
-        //board.insertBefore(fragment, board.childNodes[0]);
-
+        sticky.attr('tabindex', -1);
     });
 
 
@@ -105,7 +97,7 @@ $(function () {
         var board = $('board');
         $('#post-it').empty();
         $('#post-it').html('<p id = "insert"></p>');
-        //console.log(data);
+        console.log(data);
 
 
         for (var i = 0; i < data.length; i++) {
@@ -115,28 +107,19 @@ $(function () {
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
                     '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
-                        '<div class = "colorNoteCon">' + 
-                          '<div class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></div>' +                                    
-                          '<div class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></div>' +
-                          '<div class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></div>' +
-                          '<div class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></div>' +
-                          '<div class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></div>' +
+                        '<div id = "colorNoteCon">' + 
+                          '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +                                    
+                          '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
+                          '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
+                          '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
+                          '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
                         '</div>' +
                 '</div>';
 
-
-
             $(string).insertAfter('#insert');
             var sticky = $( "#sticky-noteid");
-            //sticky.css("background", data[i].color);
             sticky.draggable();
-            sticky.attr('tabindex',-1).focus();
-
-           // $( ".deleteNote" ).click(function(event){
-                //console.log(data);
-           //      socket.emit('deleteNote',data[i]._id);
-            //});
-
+            sticky.attr('tabindex', -1);
         }
     });
 

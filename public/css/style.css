@@ -282,14 +282,14 @@ textarea#noteForm2{
 
 
 /* Below is all the Styling for the note color buttons lel */
-.colorNoteCon {
+#colorNoteCon {
   position: absolute;
   bottom: 5px;
   left: 5px;
   display: none;
 }
 
-.sticky-note:focus .colorNoteCon {
+.sticky-note:focus #colorNoteCon {
   display: block;
 }
 
