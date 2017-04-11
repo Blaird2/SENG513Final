@@ -154,10 +154,10 @@ var setIo = function (data){
 		// Works with array
         //socket.emit('allNotes', notes);
 
-        socket.on('disconnect', function(data){
+    socket.on('disconnect', function(data){
 			users.splice(users.indexOf(userObject));
 			updateUsernames();
-        });
+    });
 
 
 		socket.on('deleteNote', function(noteID){
@@ -165,13 +165,40 @@ var setIo = function (data){
 			updateNotes(socket, true);
 		});
 
+    socket.on('changeNoteColor', function(data) {
+
+      /*Update noes's colour 
+      Note.findById(data.id, function (err, note){
+        note.color = data.color;
+        console.log(note);
+      });
+      */
+
+      /*Note.update({ _id: data.noteid }, {
+        color: data.notecolor
+      }, function(err, affected, resp) {
+         console.log(affected);
+      });*/
+
+
+      Note.update(
+      { _id: data.noteid },
+      { $set:
+        {color: data.notecolor}
+      }).exec()
+
+      //console.log(note);
+    
+      // Update all notes 
+      updateNotes(socket, true);
+    });
+
 
         //console.log(user);
 
         socket.on('note',function(data){
 
         	console.log(getTime());
-
 
             var newNote = Note({
                 username: data.username,
@@ -201,6 +228,8 @@ function getTime(){
 	return new Date();
 }
 
+
+// If true, then it ignores socket and emits to everyone, otherwise specific user
 function updateNotes(socket, updateEveryone){
     // Send new user all notes in the database
     Note.find({},function (err, note) {
@@ -208,6 +237,7 @@ function updateNotes(socket, updateEveryone){
         //console.log(note);
 
 		if(updateEveryone){
+            //console.log(note);
             io.emit('allNotes', note);
         }
         else {

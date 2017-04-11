@@ -198,7 +198,8 @@ footer{
 }
 
 #note-content {
-
+  white-space: pre-wrap;
+  resize: none;
 }
 
 .logo {
@@ -209,8 +210,10 @@ input#noteForm1{
   background-color: orange;
 }
 
-input#noteForm2{
+textarea#noteForm2{
   background-color: orange;
+  white-space: pre-wrap;
+  resize: none;
 }
 
 
