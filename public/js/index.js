@@ -1,5 +1,8 @@
 // Main JavaScript file for Post-It
 
+
+var socket;
+
 /**
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
@@ -10,22 +13,21 @@ function addNote(){
 
 }
 
-
-function deleteNote(data) {
-    console.log(data);
+function deleteNote(id){
+    socket.emit('deleteNote', id);
 }
-
-
 
 var username = null;
 
+
+
 $(function () {
+    socket = io();
 
-    $( "#note" ).draggable();
-
-    var socket = io();
     var note1 = $('#noteForm1');
     var note2 = $('#noteForm2');
+
+    $( "#note" ).draggable();
 
 
     socket.on('username',function(data){
@@ -53,6 +55,7 @@ $(function () {
     socket.on('oneNote', function(data){
         var board = $('board');
 
+
         // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // and need to update note (x,y) in db on mouse up after mouse down
 
@@ -62,7 +65,7 @@ $(function () {
                              '<li id = "title">' + data.title + '</li>' +
                             '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
-            '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data.id   +  "\'" + ')" >' +
+            '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
                     '</div>';
         $(string).insertAfter('#insert');
 
@@ -82,6 +85,10 @@ $(function () {
 
     socket.on('allNotes', function(data) {
         var board = $('board');
+        $('#post-it').empty();
+        $('#post-it').html('<p id = "insert"></p>');
+        console.log("jjjjjjjjjjjjjjjjj");
+
 
         for (var i = 0; i < data.length; i++) {
             var string = '<div class = "sticky-note" id = "sticky-noteid">' +
@@ -89,10 +96,19 @@ $(function () {
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
-                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i].id   +  "\'" + ')" >' +
+                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
+                    //'<img class = "deleteNote" src = "../images/trash.svg" onclick="function(){socket.emit(\'deleteNote\',' + data[i]._id + ');}">' +
                 '</div>';
+
+
+
             $(string).insertAfter('#insert');
             $( "#sticky-noteid" ).draggable();
+           // $( ".deleteNote" ).click(function(event){
+                //console.log(data);
+           //      socket.emit('deleteNote',data[i]._id);
+            //});
+
         }
     });
 
@@ -118,3 +134,11 @@ $(function () {
 
 
 });
+
+
+
+
+
+
+
+
