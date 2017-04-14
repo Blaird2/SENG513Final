@@ -137,14 +137,17 @@ $(function () {
 
 
 
-            var indexNote = data[i];
+            let indexNote = data[i];
             //console.log(data[i]);
 
             //console.log(document.getElementsByClassName(""+data[i]._id)[0]);
-            var thisNote = document.getElementsByClassName(""+data[i]._id)[0];
+            let thisNote = document.getElementsByClassName(""+data[i]._id)[0];
             thisNote.addEventListener("mouseup", function(){
-                console.log(indexNote._id);
+                console.log(thisNote, thisNote.style.left,thisNote.style.top);
                 socket.emit('sendPos', {id:indexNote._id, left: thisNote.style.left, top: thisNote.style.top } );
+                // setTimeout( (function(t){
+                //     console.log("later", t.style.left, t.style.top);
+                // }).bind(null, thisNote), 1000)
             });
         }
     });

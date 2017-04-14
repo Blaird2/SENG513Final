@@ -156,13 +156,15 @@ var setIo = function (data){
 	  });
 
     socket.on('sendPos', function(data){
+    	//console.log("Event Listener Executed");
 
         Note.find({_id:data.id},function (err, note) {
             if (err) return console.error(err);
             else{
-            	console.log(note[0].x);
+            	console.log(note[0].x,note[0].y);
+            	console.log(data.left,data.top)	;
             	if(note[0].x !== data.left || note[0].y !== data.top){
-            		//console.log(noteX);
+            		console.log("the if is executed");
                     Note.update({_id:data.id}, {$set:{x:data.left, y:data.top} }, function(){
                         updateNotes(socket,true);
                     });
