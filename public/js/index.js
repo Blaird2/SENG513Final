@@ -43,7 +43,6 @@ $(function () {
 
     $('form').submit(function () {
        if((note1.val().trim()) && (note2.val().trim())){
-           console.log("yas");
            socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
            note1.val(' ');
            note2.val(' ');
@@ -64,14 +63,15 @@ $(function () {
         // and need to update note (x,y) in db on mouse up after mouse down
 
         // We also need to add color here after
-        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
+        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                              '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
 
                         '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
-                        '<div id = "colorNoteCon">' + 
+                       // '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
+                        '<div id = "colorNoteCon">' +
                           '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +                                    
                           '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
                           '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
@@ -92,7 +92,7 @@ $(function () {
 
 
         var id = data._id;
-        console.log(document.getElementsByClassName(""+data._id)[0]);
+       // console.log(document.getElementsByClassName(""+data._id)[0]);
         var thisNote = document.getElementsByClassName(""+data._id)[0];
         thisNote.addEventListener("mouseup", function(){
             console.log('hello');
@@ -110,11 +110,11 @@ $(function () {
         var board = $('board');
         $('#post-it').empty();
         $('#post-it').html('<p id = "insert"></p>');
-        console.log(data);
+        //console.log(data);
 
 
         for (var i = 0; i < data.length; i++) {
-            var string = '<div class = "sticky-note ' + data[i]._id +'" id = "sticky-noteid" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
+            var string = '<div class = "sticky-note ' + data[i]._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
                 '<ul class = "note-content-list">' +
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
@@ -138,9 +138,9 @@ $(function () {
 
 
             var indexNote = data[i];
-            console.log(data[i]);
+            //console.log(data[i]);
 
-            console.log(document.getElementsByClassName(""+data[i]._id)[0]);
+            //console.log(document.getElementsByClassName(""+data[i]._id)[0]);
             var thisNote = document.getElementsByClassName(""+data[i]._id)[0];
             thisNote.addEventListener("mouseup", function(){
                 console.log(indexNote._id);

@@ -198,7 +198,22 @@ footer{
   visibility: hidden;
   z-index: 1;
 }
-
+.editNote {
+  /* display: block; */
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 150px;
+  width: 150px;
+  border: 0.5px solid black;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.15);
+  background-color: orange;
+  visibility: hidden;
+  z-index: 1;
+}
 #title {
   font-weight: 900;
 }
@@ -216,12 +231,19 @@ input#noteForm1{
   background-color: orange;
 }
 
+input#editNoteForm1{
+  background-color: orange;
+}
 textarea#noteForm2{
   background-color: orange;
   white-space: pre-wrap;
   resize: none;
 }
-
+textarea#editNoteForm2{
+  background-color: orange;
+  white-space: pre-wrap;
+  resize: none;
+}
 
 #post-it {
   display: block;

@@ -156,10 +156,21 @@ var setIo = function (data){
 	  });
 
     socket.on('sendPos', function(data){
-    	console.log(data);
-    	Note.update({_id:data.id}, {$set:{x:data.left, y:data.top} }, function(){
-    		updateNotes(socket,true);
-		});
+
+        Note.find({_id:data.id},function (err, note) {
+            if (err) return console.error(err);
+            else{
+            	console.log(note[0].x);
+            	if(note[0].x !== data.left || note[0].y !== data.top){
+            		//console.log(noteX);
+                    Note.update({_id:data.id}, {$set:{x:data.left, y:data.top} }, function(){
+                        updateNotes(socket,true);
+                    });
+				}
+
+			}
+
+        });
 	});
 
     socket.on('changeNoteColor', function(data) {
