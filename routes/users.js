@@ -150,13 +150,19 @@ var setIo = function (data){
 			updateUsernames();
     });
 
-		socket.on('deleteNote', function(noteID){
-			Note.find({_id: noteID}).remove().exec();
-			updateNotes(socket, true);
+    socket.on('deleteNote', function(noteID){
+		Note.find({_id: noteID}).remove().exec();
+		updateNotes(socket, true);
+	  });
+
+    socket.on('sendPos', function(data){
+    	console.log(data);
+    	Note.update({_id:data.id}, {$set:{x:data.left, y:data.top} }, function(){
+    		updateNotes(socket,true);
 		});
+	});
 
     socket.on('changeNoteColor', function(data) {
-      console.log(data.notecolor);
       Note.update({ _id: data.noteid }, { $set: {color: data.notecolor} }, function(){
         updateNotes(socket, true);
       });
@@ -167,7 +173,6 @@ var setIo = function (data){
 
     socket.on('note',function(data){
 
-   	  console.log(getTime());
 
       var newNote = Note({
         username: data.username,

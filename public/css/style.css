@@ -237,6 +237,8 @@ textarea#noteForm2{
   word-wrap: break-word;
   border: 0.5px solid black;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.15);
+  left:0;
+  top:0;
 
 }
 

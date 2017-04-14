@@ -31,7 +31,7 @@ $(function () {
     var note1 = $('#noteForm1');
     var note2 = $('textarea#noteForm2');
 
-    $( "#note" ).draggable();
+    //$( "#note" ).draggable();
 
 
     socket.on('username',function(data){
@@ -57,14 +57,14 @@ $(function () {
 
 
     socket.on('oneNote', function(data){
-        var board = $('board');
+        var board = $('#board');
 
 
         // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // and need to update note (x,y) in db on mouse up after mouse down
 
         // We also need to add color here after
-        var string =  '<div class = "sticky-note" id = "sticky-noteid" style = "background: '  +   data.color   + '">' +
+        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                              '<li id = "note-content">' + data.note + '</li>' +
@@ -80,11 +80,24 @@ $(function () {
                         '</div>' +
                     '</div>';
 
+       // });
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
         sticky.draggable();
         sticky.attr('tabindex', -1);
+
+
+
+
+
+        var id = data._id;
+        console.log(document.getElementsByClassName(""+data._id)[0]);
+        var thisNote = document.getElementsByClassName(""+data._id)[0];
+        thisNote.addEventListener("mouseup", function(){
+            console.log('hello');
+            socket.emit('sendPos', {id:data._id, left: thisNote.style.left, top: thisNote.style.top } );
+        });
     });
 
 
@@ -101,7 +114,7 @@ $(function () {
 
 
         for (var i = 0; i < data.length; i++) {
-            var string = '<div class = "sticky-note" id = "sticky-noteid" style = "background: '  +   data[i].color   + '">' +
+            var string = '<div class = "sticky-note ' + data[i]._id +'" id = "sticky-noteid" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
                 '<ul class = "note-content-list">' +
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
@@ -120,6 +133,19 @@ $(function () {
             var sticky = $( "#sticky-noteid");
             sticky.draggable();
             sticky.attr('tabindex', -1);
+
+
+
+
+            var indexNote = data[i];
+            console.log(data[i]);
+
+            console.log(document.getElementsByClassName(""+data[i]._id)[0]);
+            var thisNote = document.getElementsByClassName(""+data[i]._id)[0];
+            thisNote.addEventListener("mouseup", function(){
+                console.log(indexNote._id);
+                socket.emit('sendPos', {id:indexNote._id, left: thisNote.style.left, top: thisNote.style.top } );
+            });
         }
     });
 
