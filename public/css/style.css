@@ -228,14 +228,14 @@ footer{
 }
 
 input#noteForm1{
-  background-color: orange;
+  background-color: inherit;
 }
 
 input#editNoteForm1{
   background-color: inherit;
 }
 textarea#noteForm2{
-  background-color: orange;
+  background-color: inherit;
   white-space: pre-wrap;
   resize: none;
 }

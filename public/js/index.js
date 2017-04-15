@@ -1,6 +1,7 @@
 // Main JavaScript file for Post-It
 
 var colour = "orange";
+var addColour = "orange";
 var socket;
 
 var x;
@@ -9,17 +10,33 @@ var y;
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
  */
+
+function changeNoteColor(color,id) {
+        $('#editNote').css("background-color", color);
+        console.log('edit');
+        colour = color;
+    //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
+
+
+}
+function changeAddNoteColor(color,id){
+    $('#note').css("background-color", color);
+    console.log('edit');
+    addColour = color;
+}
 function addNote(){
     // Make note template visible
     document.getElementById('note').style.visibility = 'visible';
+    let colorString = '<div id = "colorNoteCon">' +
+        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeAddNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeAddNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNotePink" onclick="changeAddNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeAddNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeAddNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '</div>';
+    $('#note').append(colorString);
 }
 
-function changeNoteColor(color, id) {
-    //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
-    $('#editNote').css("background-color", color);
-    colour = color;
-
-}
 
 
 function deleteNote(id){
@@ -40,11 +57,11 @@ function editNote(obj){
     $(editNoteForm2).val(obj.note);
 
     let colorString = '<div id = "colorNoteCon">' +
-        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
         '</div>';
     $('#editNote').append(colorString);
     x = obj.x;
@@ -77,10 +94,12 @@ $(function () {
         let note1 = $('#noteForm1');
         let note2 = $('textarea#noteForm2');
        if((note1.val().trim()) && (note2.val().trim())){
-           socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
+           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour});
            note1.val(' ');
            note2.val(' ');
            document.getElementById('note').style.visibility = 'hidden';
+           document.getElementById('note').style.backgroundColor = "orange";
+           addColour = "orange";
 
        }
        return false;
