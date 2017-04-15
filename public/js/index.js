@@ -1,6 +1,6 @@
 // Main JavaScript file for Post-It
 
-
+var colour = "orange";
 var socket;
 
 /**
@@ -13,13 +13,41 @@ function addNote(){
 }
 
 function changeNoteColor(color, id) {
-    socket.emit('changeNoteColor', {notecolor:color, noteid:id});
+    //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
+    $('#editNote').css("background-color", color);
+    colour = color;
 
 }
 
 function deleteNote(id){
     socket.emit('deleteNote', id);
 }
+
+function editNote(obj){
+
+    deleteNote(obj.id);
+    console.log(obj.id);
+
+
+    let editNote = document.getElementById('editNote');
+    editNote.style.visibility = 'visible';
+    editNote.style.backgroundColor = obj.color;
+
+    $(editNoteForm1).val(obj.title);
+    $(editNoteForm2).val(obj.note);
+
+    let colorString = '<div id = "colorNoteCon">' +
+        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '</div>';
+    $('#editNote').append(colorString);
+}
+
+
+
 
 var username = null;
 
@@ -28,8 +56,7 @@ var username = null;
 $(function () {
     socket = io();
 
-    var note1 = $('#noteForm1');
-    var note2 = $('textarea#noteForm2');
+
 
     //$( "#note" ).draggable();
 
@@ -40,8 +67,10 @@ $(function () {
 
 
 
-
-    $('form').submit(function () {
+    // Submit add note form
+    $('#noteForm').submit(function () {
+        let note1 = $('#noteForm1');
+        let note2 = $('textarea#noteForm2');
        if((note1.val().trim()) && (note2.val().trim())){
            socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
            note1.val(' ');
@@ -52,12 +81,28 @@ $(function () {
        return false;
     });
 
+    // Submit edit note form
+    $('#editNoteForm').submit(function () {
+        let note1 = $('#editNoteForm1');
+        let note2 = $('textarea#editNoteForm2');
+        if((note1.val().trim()) && (note2.val().trim())){
+            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour});
+            note1.val(' ');
+            note2.val(' ');
+            document.getElementById('editNote').style.visibility = 'hidden';
+
+        }
+        return false;
+    });
+
+
 
 
 
     socket.on('oneNote', function(data){
         var board = $('#board');
 
+        let obj = {id: data._id, title: data.title, note: data.note, color: data.color, username: data.username, x: data.x, y:data.y};
 
         // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // and need to update note (x,y) in db on mouse up after mouse down
@@ -70,32 +115,29 @@ $(function () {
                         '</ul>' +
 
                         '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
+                        '<img class = "editNotePic"  id =  ' + data._id + '  src = "../images/pencil.png" onclick="editNote(' + obj + ')" >' +
                        // '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
-                        '<div id = "colorNoteCon">' +
-                          '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +                                    
-                          '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                        '</div>' +
+
                     '</div>';
 
        // });
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
-        sticky.draggable();
+        sticky.draggable({ containment: "parent" });
         sticky.attr('tabindex', -1);
 
 
-
+        // Onclick function to edit button
+        $('#' + data._id).click(function(){
+            editNote(obj);
+        });
 
 
         var id = data._id;
        // console.log(document.getElementsByClassName(""+data._id)[0]);
         var thisNote = document.getElementsByClassName(""+data._id)[0];
         thisNote.addEventListener("mouseup", function(){
-            console.log('hello');
             socket.emit('sendPos', {id:data._id, left: thisNote.style.left, top: thisNote.style.top } );
         });
     });
@@ -114,26 +156,25 @@ $(function () {
 
 
         for (var i = 0; i < data.length; i++) {
+            let obj = {id: data[i]._id, title: data[i].title, note: data[i].note, color: data[i].color, username: data[i].username, x: data[i].x, y:data[i].y};
             var string = '<div class = "sticky-note ' + data[i]._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
                 '<ul class = "note-content-list">' +
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
                     '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
-                        '<div id = "colorNoteCon">' + 
-                          '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +                                    
-                          '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data[i]._id + "\'" + ')"></span>' +
-                        '</div>' +
+                    '<img class = "editNotePic" id =  ' + data[i]._id + ' src = "../images/pencil.png"  >' +
+
                 '</div>';
 
             $(string).insertAfter('#insert');
             var sticky = $( "#sticky-noteid");
-            sticky.draggable();
+            sticky.draggable({ containment: "parent" });
             sticky.attr('tabindex', -1);
 
+            $('#' + data[i]._id).click(function(){
+                editNote(obj);
+            });
 
 
 
@@ -143,7 +184,6 @@ $(function () {
             //console.log(document.getElementsByClassName(""+data[i]._id)[0]);
             let thisNote = document.getElementsByClassName(""+data[i]._id)[0];
             thisNote.addEventListener("mouseup", function(){
-                console.log(thisNote, thisNote.style.left,thisNote.style.top);
                 socket.emit('sendPos', {id:indexNote._id, left: thisNote.style.left, top: thisNote.style.top } );
                 // setTimeout( (function(t){
                 //     console.log("later", t.style.left, t.style.top);

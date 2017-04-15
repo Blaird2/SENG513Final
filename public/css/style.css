@@ -232,7 +232,7 @@ input#noteForm1{
 }
 
 input#editNoteForm1{
-  background-color: orange;
+  background-color: inherit;
 }
 textarea#noteForm2{
   background-color: orange;
@@ -240,13 +240,17 @@ textarea#noteForm2{
   resize: none;
 }
 textarea#editNoteForm2{
-  background-color: orange;
+  background-color: inherit;
   white-space: pre-wrap;
   resize: none;
 }
 
 #post-it {
   display: block;
+  height: 100%;
+  top: 0;
+  position: absolute;
+  width: 100%;
 }
 
 .sticky-note {
@@ -295,33 +299,45 @@ textarea#editNoteForm2{
   display: none;
 }
 
-.deleteNote:hover {
-  width: 22px;
-  height: 30px;
-  bottom: 3px;
-  right: 3px;
+.editNotePic {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: auto;
+  display: none;
 }
 
-/* Making trash can visible on hover of sticky note*/
-.sticky-note:focus .deleteNote {
+
+
+/* Making trash can visible on focus of sticky note*/
+.sticky-note:hover .deleteNote {
   display: block;
 }
 
-
+/* Making pencil visible on focus of sticky note*/
+.sticky-note:hover .editNotePic {
+  display: block;
+}
 
 
 
 /* Below is all the Styling for the note color buttons lel */
 #colorNoteCon {
   position: absolute;
-  bottom: 5px;
+  bottom: 0px;
   left: 5px;
-  display: none;
+  /*display: none; */
 }
 
+/*
 .sticky-note:focus #colorNoteCon {
   display: block;
 }
+
+*/
+
+
 
 .colorNote {
   border-radius: 100px;

@@ -201,8 +201,35 @@ var setIo = function (data){
 
       io.emit('oneNote', newNote);
 
-		});
+	});
+
+      socket.on('editNote',function(data){
+          var newNote = Note({
+              username: data.username,
+              note: data.note,
+              title: data.title,
+              x: data.x,
+              y: data.y,
+              color: data.color
+          });
+
+          Note.createNote(newNote);
+          notes.push(newNote);
+
+          io.emit('oneNote', newNote);
+      });
+
+
+
+
+
+
+
+
+
+
   });
+
 };
 
 
