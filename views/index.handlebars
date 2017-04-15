@@ -4,6 +4,9 @@
         crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <div id="board">
@@ -13,7 +16,7 @@
         <form  id = "noteForm" action = "">
             <input type="text" id = "noteForm1" class="form-control" name="noteInput1" placeholder="Type here">
             <textarea type="text" id = "noteForm2" class="form-control" name="noteInput2" placeholder="Type here"></textarea>
-            <button type="submit" class="btn btn-default" class="AddButton">Add Note</button>
+            <button type="submit" class="btn btn-default addNoteButton">Add Note</button>
         </form>
 
     </div>
@@ -21,7 +24,7 @@
         <form id = "editNoteForm" action = "">
             <input type="text" id = "editNoteForm1" class = "form-control" name = "editNoteInput1">
             <textarea type="text" id = "editNoteForm2" class = "form-control" name = "editNoteInput2"></textarea>
-            <button type = "submit" class ="btn btn-default" class = "EditButton">Edit Note</button>
+            <button type = "submit" class ="btn btn-default editNoteButton">Edit Note</button>
         </form>
     </div>
 

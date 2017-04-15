@@ -65,7 +65,17 @@ body {
   text-decoration: none;
 }
 
+.addNoteButton {
+  position: absolute;
+  bottom: -35px;
+  right: 0;
+}
 
+.editNoteButton {
+  position: absolute;
+  bottom: -35px;
+  right: 0px;
+}
 
 
 
@@ -206,8 +216,8 @@ footer{
   left: 0;
   right: 0;
   margin: auto;
-  height: 150px;
-  width: 150px;
+  min-height: 150px;
+  min-width: 150px;
   border: 0.5px solid black;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.15);
   background-color: orange;
@@ -238,11 +248,14 @@ textarea#noteForm2{
   background-color: orange;
   white-space: pre-wrap;
   resize: none;
+  height: 114px;
 }
+
 textarea#editNoteForm2{
   background-color: orange;
   white-space: pre-wrap;
   resize: none;
+  height: 114px;
 }
 
 #post-it {
@@ -251,8 +264,8 @@ textarea#editNoteForm2{
 
 .sticky-note {
   display: inline-block;
-  width: 150px;
-  height: 160px;
+  min-width: 150px;
+  min-height: 160px;
   background: orange;
   margin: 5px;
   position: relative;

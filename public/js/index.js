@@ -38,14 +38,39 @@ $(function () {
         username = data;
     });
 
+/*
+    $('textarea#noteForm2').keydown(function(e){
+      if ((e.keyCode == 13 && e.shiftKey) && ((note1.val().trim()) && (note2.val().trim())))
+      {
+        $('form').submit(function () {
+       
+             socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
+             note1.val('');
+             note2.val('');
+             document.getElementById('note').style.visibility = 'hidden';
+          return false;
+        });
+      }
 
-
+      else if ((e.keyCode === 13) && ((note1.val().trim()) && (note2.val().trim())))
+      {
+        //e.preventDefault();
+        $('form').submit(function () {
+          socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
+          note1.val('');
+          note2.val('');
+          document.getElementById('note').style.visibility = 'hidden';
+          return false;
+        });
+      }
+    });
+*/
 
     $('form').submit(function () {
        if((note1.val().trim()) && (note2.val().trim())){
            socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
-           note1.val(' ');
-           note2.val(' ');
+           note1.val('');
+           note2.val('');
            document.getElementById('note').style.visibility = 'hidden';
 
        }
@@ -58,19 +83,14 @@ $(function () {
     socket.on('oneNote', function(data){
         var board = $('#board');
 
-
-        // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // and need to update note (x,y) in db on mouse up after mouse down
-
-        // We also need to add color here after
-        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
+        var string =  '<div class = "sticky-note ui-widget-content '+ data._id +'" id = "sticky-noteid" draggable="true" resizable="true" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                              '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
 
                         '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
-                       // '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
+                        '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
                         '<div id = "colorNoteCon">' +
                           '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +                                    
                           '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
@@ -85,6 +105,7 @@ $(function () {
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
         sticky.draggable();
+        sticky.resizable();
         sticky.attr('tabindex', -1);
 
 
@@ -114,7 +135,7 @@ $(function () {
 
 
         for (var i = 0; i < data.length; i++) {
-            var string = '<div class = "sticky-note ' + data[i]._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
+            var string = '<div class = "sticky-note ui-widget-content ' + data[i]._id +'" id = "sticky-noteid" draggable="true" resizable="true" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
                 '<ul class = "note-content-list">' +
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
@@ -132,6 +153,7 @@ $(function () {
             $(string).insertAfter('#insert');
             var sticky = $( "#sticky-noteid");
             sticky.draggable();
+            sticky.resizable();
             sticky.attr('tabindex', -1);
 
 
