@@ -48,6 +48,9 @@ function editNote(obj){
     deleteNote(obj.id);
     console.log(obj.id);
 
+    //Make public variable the same as the note
+    colour = obj.color;
+
 
     let editNote = document.getElementById('editNote');
     editNote.style.visibility = 'visible';
@@ -114,7 +117,7 @@ $(function () {
             note1.val(' ');
             note2.val(' ');
             document.getElementById('editNote').style.visibility = 'hidden';
-
+            colour = "orange";
         }
         return false;
     });
@@ -148,6 +151,7 @@ $(function () {
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
         sticky.draggable({ containment: "parent" });
+        //sticky.draggable({ containment: "parent" }).resizable();
         sticky.attr('tabindex', -1);
 
 
@@ -194,6 +198,7 @@ $(function () {
             $(string).insertAfter('#insert');
             let sticky = $( "#sticky-noteid");
             sticky.draggable({ containment: "parent" });
+            //sticky.draggable({ containment: "parent" }).resizable();
             sticky.attr('tabindex', -1);
 
 

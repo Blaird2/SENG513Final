@@ -265,7 +265,8 @@ textarea#editNoteForm2{
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.15);
   left:0;
   top:0;
-
+  overflow: hidden;
+  /*resize: both; */
 }
 
 .note-content-list {
