@@ -192,7 +192,7 @@ $(function () {
                 '</div>';
 
             $(string).insertAfter('#insert');
-            var sticky = $( "#sticky-noteid");
+            let sticky = $( "#sticky-noteid");
             sticky.draggable({ containment: "parent" });
             sticky.attr('tabindex', -1);
 
