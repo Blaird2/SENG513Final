@@ -3,6 +3,8 @@
 var colour = "orange";
 var socket;
 
+var x;
+var y;
 /**
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
@@ -18,6 +20,7 @@ function changeNoteColor(color, id) {
     colour = color;
 
 }
+
 
 function deleteNote(id){
     socket.emit('deleteNote', id);
@@ -44,6 +47,8 @@ function editNote(obj){
         '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
         '</div>';
     $('#editNote').append(colorString);
+    x = obj.x;
+    y = obj.y;
 }
 
 
@@ -86,7 +91,7 @@ $(function () {
         let note1 = $('#editNoteForm1');
         let note2 = $('textarea#editNoteForm2');
         if((note1.val().trim()) && (note2.val().trim())){
-            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour});
+            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour,x:x,y:y});
             note1.val(' ');
             note2.val(' ');
             document.getElementById('editNote').style.visibility = 'hidden';
@@ -101,8 +106,7 @@ $(function () {
 
     socket.on('oneNote', function(data){
         var board = $('#board');
-
-        let obj = {id: data._id, title: data.title, note: data.note, color: data.color, username: data.username, x: data.x, y:data.y};
+        let obj = {};
 
         // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // and need to update note (x,y) in db on mouse up after mouse down
@@ -128,17 +132,19 @@ $(function () {
         sticky.attr('tabindex', -1);
 
 
-        // Onclick function to edit button
-        $('#' + data._id).click(function(){
-            editNote(obj);
-        });
-
 
         var id = data._id;
        // console.log(document.getElementsByClassName(""+data._id)[0]);
         var thisNote = document.getElementsByClassName(""+data._id)[0];
         thisNote.addEventListener("mouseup", function(){
             socket.emit('sendPos', {id:data._id, left: thisNote.style.left, top: thisNote.style.top } );
+        });
+
+        obj = {id: data._id, title: data.title, note: data.note, color: data.color, username: data.username, x: thisNote.style.left, y:thisNote.style.top};
+
+        // Onclick function to edit button
+        $('#' + data._id).click(function(){
+            editNote(obj);
         });
     });
 
@@ -156,7 +162,6 @@ $(function () {
 
 
         for (var i = 0; i < data.length; i++) {
-            let obj = {id: data[i]._id, title: data[i].title, note: data[i].note, color: data[i].color, username: data[i].username, x: data[i].x, y:data[i].y};
             var string = '<div class = "sticky-note ' + data[i]._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data[i].color   + '; left: ' + data[i].x + '; top: ' + data[i].y + ';">' +
                 '<ul class = "note-content-list">' +
                 '<li id = "title">' + data[i].title + '</li>' +
@@ -172,11 +177,6 @@ $(function () {
             sticky.draggable({ containment: "parent" });
             sticky.attr('tabindex', -1);
 
-            $('#' + data[i]._id).click(function(){
-                editNote(obj);
-            });
-
-
 
             let indexNote = data[i];
             //console.log(data[i]);
@@ -189,6 +189,13 @@ $(function () {
                 //     console.log("later", t.style.left, t.style.top);
                 // }).bind(null, thisNote), 1000)
             });
+            let obj = {id: data[i]._id, title: data[i].title, note: data[i].note, color: data[i].color, username: data[i].username, x:thisNote.style.left, y:thisNote.style.top};
+
+            $('#' + data[i]._id).click(function(){
+                editNote(obj);
+            });
+
+
         }
     });
 

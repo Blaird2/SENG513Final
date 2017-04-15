@@ -204,6 +204,7 @@ var setIo = function (data){
 	});
 
       socket.on('editNote',function(data){
+         console.log(data.x,data.y);
           var newNote = Note({
               username: data.username,
               note: data.note,
