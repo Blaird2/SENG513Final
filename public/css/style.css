@@ -34,7 +34,7 @@ body {
   border-radius: 5px;
   height: 80vh;
   margin: 15px;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 }
 
@@ -314,11 +314,13 @@ textarea#editNoteForm2{
 /* Making trash can visible on focus of sticky note*/
 .sticky-note:hover .deleteNote {
   display: block;
+  visibility: hidden;
 }
 
 /* Making pencil visible on focus of sticky note*/
 .sticky-note:hover .editNotePic {
   display: block;
+  visibility: hidden;
 }
 
 
@@ -372,6 +374,17 @@ textarea#editNoteForm2{
 
 #colorNoteOrange {
   background: #fa0;
+}
+
+.noteUsername {
+  object-fit: cover;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  bottom: 3px;
+  left: 3px;
+  position: absolute;
+  box-shadow: 2px 2px 5px #696969;
 }
 
 

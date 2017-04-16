@@ -6,6 +6,7 @@ var socket;
 
 var x;
 var y;
+var offset = 0;
 /**
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
@@ -13,7 +14,6 @@ var y;
 
 function changeNoteColor(color,id) {
         $('#editNote').css("background-color", color);
-        console.log('edit');
         colour = color;
     //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
 
@@ -21,7 +21,6 @@ function changeNoteColor(color,id) {
 }
 function changeAddNoteColor(color,id){
     $('#note').css("background-color", color);
-    console.log('edit');
     addColour = color;
 }
 function addNote(){
@@ -45,8 +44,9 @@ function deleteNote(id){
 
 function editNote(obj){
 
+    if(document.getElementById("editNote").style.visibility === "visible")
+        return;
     deleteNote(obj.id);
-    console.log(obj.id);
 
     //Make public variable the same as the note
     colour = obj.color;
@@ -75,6 +75,7 @@ function editNote(obj){
 
 
 var username = null;
+var userPic = null;
 
 
 
@@ -87,7 +88,8 @@ $(function () {
 
 
     socket.on('username',function(data){
-        username = data;
+        username = data.user;
+        userPic = data.url;
     });
 
 
@@ -97,7 +99,7 @@ $(function () {
         let note1 = $('#noteForm1');
         let note2 = $('textarea#noteForm2');
        if((note1.val().trim()) && (note2.val().trim())){
-           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour});
+           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour, url: userPic, x: offset+"px", y: "0px"});
            note1.val(' ');
            note2.val(' ');
            document.getElementById('note').style.visibility = 'hidden';
@@ -113,7 +115,7 @@ $(function () {
         let note1 = $('#editNoteForm1');
         let note2 = $('textarea#editNoteForm2');
         if((note1.val().trim()) && (note2.val().trim())){
-            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour,x:x,y:y});
+            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour,x:x,y:y, url: userPic});
             note1.val(' ');
             note2.val(' ');
             document.getElementById('editNote').style.visibility = 'hidden';
@@ -129,24 +131,25 @@ $(function () {
     socket.on('oneNote', function(data){
         var board = $('#board');
         let obj = {};
-
         // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // and need to update note (x,y) in db on mouse up after mouse down
 
         // We also need to add color here after
-        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
+        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data.color   + '; left: ' + offset + 'px; top: ' + data.y + ';">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                              '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
 
-                        '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
-                        '<img class = "editNotePic"  id =  ' + data._id + '  src = "../images/pencil.png" onclick="editNote(' + obj + ')" >' +
-                       // '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
+                        '<img class = "deleteNote ' + username+'" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
+                        '<img class = "editNotePic ' + username+'"  id =  ' + data._id + '  src = "../images/pencil.png" onclick="editNote(' + obj + ')" >' +
+                        //'<p class = "noteUsername">'+ data[i].username + '</p>'+
+
+                        '<img class = "noteUsername" src ='+ data.userPic + '>' +
 
                     '</div>';
 
-       // });
+        offset   += 160;
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
@@ -154,6 +157,10 @@ $(function () {
         //sticky.draggable({ containment: "parent" }).resizable();
         sticky.attr('tabindex', -1);
 
+        if(username === data.username){
+            document.getElementsByClassName(username)[0].style.visibility = "visible";
+            document.getElementsByClassName(username)[1].style.visibility = "visible";
+        }
 
 
         var id = data._id;
@@ -178,10 +185,10 @@ $(function () {
 
 
     socket.on('allNotes', function(data) {
+        console.log(data)
         var board = $('board');
         $('#post-it').empty();
         $('#post-it').html('<p id = "insert"></p>');
-        //console.log(data);
 
 
         for (var i = 0; i < data.length; i++) {
@@ -190,8 +197,9 @@ $(function () {
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
-                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
-                    '<img class = "editNotePic" id =  ' + data[i]._id + ' src = "../images/pencil.png"  >' +
+                    '<img class = "deleteNote ' + username+'" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
+                    '<img class = "editNotePic ' + username+'" id =  ' + data[i]._id + ' src = "../images/pencil.png"  >' +
+                    '<img class = "noteUsername" src ='+ data[i].userPic + '>' +
 
                 '</div>';
 
@@ -200,6 +208,11 @@ $(function () {
             sticky.draggable({ containment: "parent" });
             //sticky.draggable({ containment: "parent" }).resizable();
             sticky.attr('tabindex', -1);
+
+            if(username === data[i].username){
+                document.getElementsByClassName(username)[0].style.visibility = "visible";
+                document.getElementsByClassName(username)[1].style.visibility = "visible";
+            }
 
 
             let indexNote = data[i];
@@ -230,6 +243,7 @@ $(function () {
 
 
     socket.on('get users',function(data){
+        console.log("getusers:", JSON.stringify( data));
        var string = "";
        for(var i = 0; i < data.length; i++){
           
