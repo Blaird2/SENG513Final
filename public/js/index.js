@@ -1,25 +1,62 @@
 // Main JavaScript file for Post-It
 
 var colour = "orange";
+var addColour = "orange";
 var socket;
 
 var x;
 var y;
+
+//  $('#board').css("background-image", " url('https://abx-static.s3-us-west-2.amazonaws.com/176671/previews/poster.jpg') ");
+ // $('#board').css("background-repeat", "repeat");
+
 /**
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
  */
+
+function changeNoteColor(color,id) {
+    $('#editNote').css("background-color", color);
+    console.log('edit');
+    colour = color;
+    //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
+}
+
+function changeAddNoteColor(color,id){
+    $('#note').css("background-color", color);
+    console.log('edit');
+    addColour = color;
+}
+
+function changeBackground(type, color) {
+  //background-image: url("https://abx-static.s3-us-west-2.amazonaws.com/176671/previews/poster.jpg");
+  //background-repeat: repeat;
+  if (type === 'pattern') {
+    $('#board').css("background-image", " url(' " + color + " ') ");
+    $('#board').css("background-repeat", "repeat");
+  }
+
+  else {
+    $('#board').css("background-image", "");
+    $('#board').css("background-repeat", "");
+    $('#board').css("background-color", color);
+  }
+  
+}
+
 function addNote(){
     // Make note template visible
     document.getElementById('note').style.visibility = 'visible';
+    let colorString = '<div id = "colorNoteCon">' +
+        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeAddNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeAddNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNotePink" onclick="changeAddNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeAddNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeAddNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + false + "\'" + ')"></span>' +
+        '</div>';
+    $('#note').append(colorString);
 }
 
-function changeNoteColor(color, id) {
-    //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
-    $('#editNote').css("background-color", color);
-    colour = color;
-
-}
 
 
 function deleteNote(id){
@@ -31,6 +68,9 @@ function editNote(obj){
     deleteNote(obj.id);
     console.log(obj.id);
 
+    //Make public variable the same as the note
+    colour = obj.color;
+
 
     let editNote = document.getElementById('editNote');
     editNote.style.visibility = 'visible';
@@ -40,11 +80,11 @@ function editNote(obj){
     $(editNoteForm2).val(obj.note);
 
     let colorString = '<div id = "colorNoteCon">' +
-        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
-        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + obj.id + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
+        '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + true + "\'" + ')"></span>' +
         '</div>';
     $('#editNote').append(colorString);
     x = obj.x;
@@ -108,10 +148,13 @@ $(function () {
         let note2 = $('textarea#noteForm2');
 
        if((note1.val().trim()) && (note2.val().trim())){
-           socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
-           note1.val('');
-           note2.val('');
+           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour});
+           note1.val(' ');
+           note2.val(' ');
+
            document.getElementById('note').style.visibility = 'hidden';
+           document.getElementById('note').style.backgroundColor = "orange";
+           addColour = "orange";
 
        }
        return false;
@@ -126,7 +169,7 @@ $(function () {
             note1.val(' ');
             note2.val(' ');
             document.getElementById('editNote').style.visibility = 'hidden';
-
+            colour = "orange";
         }
         return false;
     });
@@ -153,13 +196,7 @@ $(function () {
 
                         '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
 
-                        '<div id = "colorNoteCon">' +
-                          '<span class = "colorNote" id = "colorNoteBlue" onclick="changeNoteColor('   + " \'" + '#0ff' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +                                    
-                          '<span class = "colorNote" id = "colorNoteYellow" onclick="changeNoteColor(' + " \'" + '#ff0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNotePink" onclick="changeNoteColor('   + " \'" + '#f0f' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNoteGreen" onclick="changeNoteColor('  + " \'" + '#0f0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                          '<span class = "colorNote" id = "colorNoteOrange" onclick="changeNoteColor(' + " \'" + '#fa0' + " \'" + ', ' + " \'" + data._id + "\'" + ')"></span>' +
-                        '</div>' +
+
 
                         '<img class = "editNotePic"  id =  ' + data._id + '  src = "../images/pencil.png" onclick="editNote(' + obj + ')" >' +
                        // '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
@@ -170,9 +207,7 @@ $(function () {
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
-
         sticky.draggable({ containment: "parent" });
-
         sticky.attr('tabindex', -1);
 
 
@@ -217,10 +252,8 @@ $(function () {
                 '</div>';
 
             $(string).insertAfter('#insert');
-            var sticky = $( "#sticky-noteid");
-
+            let sticky = $( "#sticky-noteid");
             sticky.draggable({ containment: "parent" });
-
             sticky.attr('tabindex', -1);
 
 

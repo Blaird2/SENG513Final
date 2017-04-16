@@ -193,7 +193,7 @@ var setIo = function (data){
         title: data.title,
 	      x: "0px",
 	      y: "0px",
-        color: "#fa0"
+        color: data.colour
       });
   
       Note.createNote(newNote);

@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="/css/bootstrap.css" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="icon" href="/public/images/favcon.png">
+  <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
+
 </head>
 <body>
   <div >
@@ -45,7 +47,25 @@
 
 
                 
-                <li role="presentation"><a href="/">Dashboard</a></li>
+
+                <li>    
+                  <div class="dropdown" role="presentation">
+                    <button class="btn btn-default dropdown-toggle settings" type="button" data-toggle="dropdown"><a>Background</a></button>
+                    <!-- <span class="caret"></span></button> -->
+                    <ul class="dropdown-menu">
+                      <li class="dropdown-header">Pattern</li>
+                      <li><a onclick="changeBackground('pattern', 'https://abx-static.s3-us-west-2.amazonaws.com/176671/previews/poster.jpg')">Cork</a></li>
+                      <li><a onclick="changeBackground('pattern', 'https://s-media-cache-ak0.pinimg.com/originals/fa/2a/52/fa2a5274e547ddd9fa9b363145ea41e3.jpg')">Wood</a></li>
+                      <li><a onclick="changeBackground('pattern', 'http://gamelogic.co.za/blog/wp-content/uploads/2013/08/color_m2_4.png')">Plaid</a></li>
+                      <li class="divider"></li>
+                      <li class="dropdown-header">Solid Color</li>
+                      <li><a onclick="changeBackground('solid', 'white')">White</a></li>
+                      <li><a onclick="changeBackground('solod', 'black')">Black</a></li>
+                      <li><a onclick="changeBackground('solid', 'grey')">Grey</a></li>
+                    </ul>
+                  </div>
+                </li>
+
                 <li role="presentation"><a href="/users/logout">Logout</a></li>
                 <li id = "users"></li>
             {{else}}
@@ -90,15 +110,14 @@
       </div>
 
 
-      <footer class="footer" >
-        <p>&copy; 2017 Post-It, Inc.</p>
-      </footer>
 
     </div> <!-- /container -->
     <script src="js/index.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script src="js/jquery.min.js" ></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 </body>
 </html>
