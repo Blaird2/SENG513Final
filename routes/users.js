@@ -149,6 +149,7 @@ var setIo = function (data) {
 
         // Works with array
         socket.on('disconnect', function (data) {
+            //wait(1000);
             console.log('deleting ng a user: ', socket.userObj.user);
 
 
@@ -167,7 +168,10 @@ var setIo = function (data) {
                 users.splice(index, 1);
             }
 
+
+
             updateUsernames();
+            //wait(1000);
         });
 
         socket.on('deleteNote', function (noteID) {
@@ -276,6 +280,14 @@ function updateNotes(socket, updateEveryone) {
 
         }
     });
+}
+
+function wait(ms){
+    var start = new Date().getTime();
+    var end = start;
+    while(end < start + ms) {
+        end = new Date().getTime();
+    }
 }
 
 

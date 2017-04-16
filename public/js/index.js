@@ -7,6 +7,7 @@ var socket;
 var x;
 var y;
 var offset = 0;
+var offset_y = 0;
 /**
  * Called when a user clicks the "+" button,
  * brings up the new note creation.
@@ -99,7 +100,7 @@ $(function () {
         let note1 = $('#noteForm1');
         let note2 = $('textarea#noteForm2');
        if((note1.val().trim()) && (note2.val().trim())){
-           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour, url: userPic, x: offset+"px", y: "0px"});
+           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour, url: userPic, x: offset+"px", y: offset_y+"px"});
            note1.val(' ');
            note2.val(' ');
            document.getElementById('note').style.visibility = 'hidden';
@@ -135,7 +136,7 @@ $(function () {
         // and need to update note (x,y) in db on mouse up after mouse down
 
         // We also need to add color here after
-        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data.color   + '; left: ' + offset + 'px; top: ' + data.y + ';">' +
+        var string =  '<div class = "sticky-note '+ data._id +'" id = "sticky-noteid" draggable="true" style = "background: '  +   data.color   + '; left: ' + data.x + '; top: ' + data.y + ';">' +
                         '<ul class = "note-content-list">' +
                              '<li id = "title">' + data.title + '</li>' +
                              '<li id = "note-content">' + data.note + '</li>' +
@@ -149,7 +150,20 @@ $(function () {
 
                     '</div>';
 
-        offset   += 160;
+        //Adjusgting the offset
+        console.log(board.width(), "offser: ", offset);
+        if(board.width() < (offset+160)){
+            offset = 0;
+            offset_y += 170
+
+        }
+        else{
+            offset   += 160;
+        }
+
+
+
+
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
