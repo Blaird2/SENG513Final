@@ -1,14 +1,18 @@
 // Main JavaScript file for Post-It
 
 var colour = "orange";
+
 var addColour = "orange";
 var socket;
 
 var x;
 var y;
 
-//  $('#board').css("background-image", " url('https://abx-static.s3-us-west-2.amazonaws.com/176671/previews/poster.jpg') ");
- // $('#board').css("background-repeat", "repeat");
+var offset = 0;
+var offset_y = 0;
+
+//$('#board').css("background-image", " url('https://abx-static.s3-us-west-2.amazonaws.com/176671/previews/poster.jpg') ");
+//$('#board').css("background-repeat", "repeat");
 
 /**
  * Called when a user clicks the "+" button,
@@ -19,16 +23,22 @@ function changeNoteColor(color,id) {
     $('#editNote').css("background-color", color);
     console.log('edit');
     colour = color;
+
     //socket.emit('changeNoteColor', {notecolor:color, noteid:id});
 }
 
 function changeAddNoteColor(color,id){
     $('#note').css("background-color", color);
-    console.log('edit');
     addColour = color;
 }
 
 function changeBackground(type, color) {
+  
+  // Telling server to let everyone know to switch backgorund
+  socket.emit('changeBackground', {type: type, color: color});
+}
+
+function updateBackground(type, color){
   //background-image: url("https://abx-static.s3-us-west-2.amazonaws.com/176671/previews/poster.jpg");
   //background-repeat: repeat;
   if (type === 'pattern') {
@@ -41,7 +51,6 @@ function changeBackground(type, color) {
     $('#board').css("background-repeat", "");
     $('#board').css("background-color", color);
   }
-  
 }
 
 function addNote(){
@@ -65,8 +74,9 @@ function deleteNote(id){
 
 function editNote(obj){
 
+    if(document.getElementById("editNote").style.visibility === "visible")
+        return;
     deleteNote(obj.id);
-    console.log(obj.id);
 
     //Make public variable the same as the note
     colour = obj.color;
@@ -95,6 +105,7 @@ function editNote(obj){
 
 
 var username = null;
+var userPic = null;
 
 
 
@@ -107,39 +118,9 @@ $(function () {
 
 
     socket.on('username',function(data){
-        username = data;
+        username = data.user;
+        userPic = data.url;
     });
-
-
-/*
-    $('textarea#noteForm2').keydown(function(e){
-      if ((e.keyCode == 13 && e.shiftKey) && ((note1.val().trim()) && (note2.val().trim())))
-      {
-        $('form').submit(function () {
-       
-             socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
-             note1.val('');
-             note2.val('');
-             document.getElementById('note').style.visibility = 'hidden';
-          return false;
-        });
-      }
-
-      else if ((e.keyCode === 13) && ((note1.val().trim()) && (note2.val().trim())))
-      {
-        //e.preventDefault();
-        $('form').submit(function () {
-          socket.emit('note',{note:note2.val(), title:note1.val(),username:username});
-          note1.val('');
-          note2.val('');
-          document.getElementById('note').style.visibility = 'hidden';
-          return false;
-        });
-      }
-    });
-*/
-
-
 
 
     // Submit add note form
@@ -148,7 +129,7 @@ $(function () {
         let note2 = $('textarea#noteForm2');
 
        if((note1.val().trim()) && (note2.val().trim())){
-           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour});
+           socket.emit('note',{note:note2.val(), title:note1.val(),username:username, colour:addColour, url: userPic, x: offset+"px", y: offset_y+"px"});
            note1.val(' ');
            note2.val(' ');
 
@@ -165,7 +146,7 @@ $(function () {
         let note1 = $('#editNoteForm1');
         let note2 = $('textarea#editNoteForm2');
         if((note1.val().trim()) && (note2.val().trim())){
-            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour,x:x,y:y});
+            socket.emit('editNote',{note:note2.val(), title:note1.val(),username:username,color:colour,x:x,y:y, url: userPic});
             note1.val(' ');
             note2.val(' ');
             document.getElementById('editNote').style.visibility = 'hidden';
@@ -182,7 +163,6 @@ $(function () {
         var board = $('#board');
 
         let obj = {};
-
         // need to add coordinates here !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // and need to update note (x,y) in db on mouse up after mouse down
 
@@ -194,22 +174,39 @@ $(function () {
                              '<li id = "note-content">' + data.note + '</li>' +
                         '</ul>' +
 
-                        '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
 
+                        '<img class = "deleteNote ' + username+'" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data._id   +  "\'" + ')" >' +
+                        '<img class = "editNotePic ' + username+'"  id =  ' + data._id + '  src = "../images/pencil.png" onclick="editNote(' + obj + ')" >' +
+                        //'<p class = "noteUsername">'+ data[i].username + '</p>'+
 
-
-                        '<img class = "editNotePic"  id =  ' + data._id + '  src = "../images/pencil.png" onclick="editNote(' + obj + ')" >' +
-                       // '<img class = "editNote" src = "../images/1314141350604165759pencil_in_black_and_white_0515-1007-2718-0953_smu-md.png" onclick = "editNote()">' +
+                        '<img class = "noteUsername" src ='+ data.userPic + '>' +
 
                     '</div>';
 
-       // });
+        //Adjusgting the offset
+        console.log(board.width(), "offser: ", offset);
+        if(board.width() < (offset+160)){
+            offset = 0;
+            offset_y += 170
+
+        }
+        else{
+            offset   += 160;
+        }
+
+
+
+
         $(string).insertAfter('#insert');
         var sticky = $( "#sticky-noteid");
         sticky.css("background", data.color);
         sticky.draggable({ containment: "parent" });
         sticky.attr('tabindex', -1);
 
+        if(username === data.username){
+            document.getElementsByClassName(username)[0].style.visibility = "visible";
+            document.getElementsByClassName(username)[1].style.visibility = "visible";
+        }
 
 
         var id = data._id;
@@ -234,10 +231,10 @@ $(function () {
 
 
     socket.on('allNotes', function(data) {
+        console.log(data)
         var board = $('board');
         $('#post-it').empty();
         $('#post-it').html('<p id = "insert"></p>');
-        //console.log(data);
 
 
         for (var i = 0; i < data.length; i++) {
@@ -246,8 +243,9 @@ $(function () {
                 '<li id = "title">' + data[i].title + '</li>' +
                 '<li id = "note-content">' + data[i].note + '</li>' +
                 '</ul>' +
-                    '<img class = "deleteNote" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
-                    '<img class = "editNotePic" id =  ' + data[i]._id + ' src = "../images/pencil.png"  >' +
+                    '<img class = "deleteNote ' + username+'" src = "../images/trash.svg" onclick="deleteNote(' + " \'" +   data[i]._id   +  "\'" + ')" >' +
+                    '<img class = "editNotePic ' + username+'" id =  ' + data[i]._id + ' src = "../images/pencil.png"  >' +
+                    '<img class = "noteUsername" src ='+ data[i].userPic + '>' +
 
                 '</div>';
 
@@ -255,6 +253,11 @@ $(function () {
             let sticky = $( "#sticky-noteid");
             sticky.draggable({ containment: "parent" });
             sticky.attr('tabindex', -1);
+
+            if(username === data[i].username){
+                document.getElementsByClassName(username)[0].style.visibility = "visible";
+                document.getElementsByClassName(username)[1].style.visibility = "visible";
+            }
 
 
             let indexNote = data[i];
@@ -285,6 +288,7 @@ $(function () {
 
 
     socket.on('get users',function(data){
+        console.log("getusers:", JSON.stringify( data));
        var string = "";
        for(var i = 0; i < data.length; i++){
           
@@ -295,6 +299,21 @@ $(function () {
        }
 
     });
+
+
+    // Updating background
+    socket.on('updateBackground' ,function(data){
+
+      if(Object.keys(data).length !== 0){
+        updateBackground(data.type, data.color);
+      }
+
+    });
+
+
+
+
+
 });
 
 
