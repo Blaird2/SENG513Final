@@ -225,8 +225,10 @@ footer{
 }
 
 #note-content {
-  white-space: pre-wrap;
-  resize: none;
+      white-space: pre-wrap;
+    resize: none;
+    overflow: auto;
+    max-height: 100px;
 }
 
 .logo {
@@ -244,14 +246,14 @@ textarea#noteForm2{
   background-color: inherit;
   white-space: pre-wrap;
   resize: none;
-  height: 114px;
+  height: 85px;
 }
 
 textarea#editNoteForm2{
   background-color: inherit;
   white-space: pre-wrap;
   resize: none;
-  height: 114px;
+  height: 85px;
 }
 
 #post-it {
@@ -264,8 +266,8 @@ textarea#editNoteForm2{
 
 .sticky-note {
   display: inline-block;
-  min-width: 150px;
-  min-height: 160px;
+  width: 150px;
+  height: 160px;
   background: orange;
   margin: 5px;
   position: absolute;
@@ -309,11 +311,6 @@ a:hover {
   top: calc(-80vh - 15px);
 }
 
-
-
-
-
-
 .deleteNote {
   width: 18px;
   height: 26px;
@@ -332,7 +329,9 @@ a:hover {
   display: none;
 }
 
-
+.ui-widget-content {
+    border: 1px solid #000 !important;
+}
 
 /* Making trash can visible on focus of sticky note*/
 .sticky-note:hover .deleteNote {
